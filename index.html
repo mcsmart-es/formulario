@@ -1,780 +1,1564 @@
 <!DOCTYPE html>
+
 <html lang="es">
+
 <head>
+
 <meta charset="UTF-8"/>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
 <title>MCsmart · Contratar MCTags</title>
+
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --navy: #1B2A4A;
-    --navy-mid: #243660;
-    --red: #E63329;
-    --white: #FFFFFF;
-    --off: #f6f7fb;
-    --border: #dde3ef;
-    --muted: #8a93a8;
-    --text: #1a1f2e;
-    --green: #16a34a;
-    --green-light: #f0fdf4;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--off);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 2rem 1rem 4rem;
-  }
 
-  .header { text-align: center; margin-bottom: 2.5rem; }
 
-  .logo-mark {
-    display: inline-block;
-    background: var(--navy);
-    color: white;
-    font-size: 0.9rem;
-    font-weight: 800;
-    padding: 0.3rem 0.7rem;
-    border-radius: 4px;
-    letter-spacing: 0.05rem;
-    margin-bottom: 1.2rem;
-  }
-  .logo-mark span { color: var(--red); }
+:root {
 
-  .header h1 {
-    font-size: clamp(1.4rem, 4vw, 2rem);
-    font-weight: 700;
-    color: var(--navy);
-    margin-bottom: 0.5rem;
-  }
+--navy: #1B2A4A;
 
-  .header p {
-    color: var(--muted);
-    font-size: 0.88rem;
-    max-width: 420px;
-    margin: 0 auto;
-    line-height: 1.6;
-  }
+--navy-mid: #243660;
 
-  /* PROGRESS */
-  .progress-wrap { max-width: 580px; margin: 0 auto 2rem; }
-  .progress-steps { display: flex; align-items: center; justify-content: center; }
+--red: #E63329;
 
-  .step { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; flex: 1; }
+--white: #FFFFFF;
 
-  .step-dot {
-    width: 28px; height: 28px; border-radius: 50%;
-    background: var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.7rem; font-weight: 700; color: var(--muted);
-    transition: all 0.3s; position: relative; z-index: 1;
-  }
-  .step.active .step-dot { background: var(--navy); color: white; }
-  .step.done .step-dot { background: var(--green); color: white; }
+--off: #f6f7fb;
 
-  .step-label { font-size: 0.65rem; color: var(--muted); font-weight: 500; text-align: center; white-space: nowrap; }
-  .step.active .step-label { color: var(--navy); font-weight: 700; }
-  .step.done .step-label { color: var(--green); }
+--border: #dde3ef;
 
-  .step-line { flex: 1; height: 2px; background: var(--border); margin-top: -14px; transition: background 0.3s; }
-  .step-line.done { background: var(--green); }
+--muted: #8a93a8;
 
-  /* CARD */
-  .card {
-    background: white; border: 1px solid var(--border); border-radius: 12px;
-    padding: 2rem; max-width: 580px; margin: 0 auto;
-    box-shadow: 0 2px 16px rgba(27,42,74,0.06);
-  }
+--text: #1a1f2e;
 
-  .section-header { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+--green: #16a34a;
 
-  .section-label {
-    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15rem;
-    text-transform: uppercase; color: var(--red); margin-bottom: 0.3rem;
-  }
-  .section-title { font-size: 1.1rem; font-weight: 700; color: var(--navy); }
+--green-light: #f0fdf4;
 
-  /* FORM */
-  .form-group { margin-bottom: 1.1rem; }
+}
 
-  label.field-label {
-    display: block; font-size: 0.78rem; font-weight: 600;
-    color: var(--navy); margin-bottom: 0.35rem;
-  }
 
-  .req { color: var(--red); }
-  .opt { color: var(--muted); font-weight: 400; font-size: 0.72rem; }
 
-  input[type="text"],
-  input[type="email"],
-  input[type="tel"],
-  input[type="url"],
-  select {
-    width: 100%; padding: 0.65rem 0.85rem;
-    border: 1.5px solid var(--border); border-radius: 8px;
-    font-size: 0.88rem; font-family: inherit; color: var(--text);
-    background: var(--off);
-    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
-    outline: none; -webkit-appearance: none;
-  }
+body {
 
-  input:focus, select:focus {
-    border-color: var(--navy); background: white;
-    box-shadow: 0 0 0 3px rgba(27,42,74,0.08);
-  }
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
-  input.error, select.error {
-    border-color: var(--red);
-    box-shadow: 0 0 0 3px rgba(230,51,41,0.08);
-  }
+background: var(--off);
 
-  .error-msg { font-size: 0.72rem; color: var(--red); margin-top: 0.3rem; display: none; }
-  .hint { font-size: 0.72rem; color: var(--muted); margin-top: 0.3rem; line-height: 1.4; }
+color: var(--text);
 
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+min-height: 100vh;
 
-  /* PLANES */
-  .planes-grid { display: flex; flex-direction: column; gap: 0.6rem; }
+padding: 2rem 1rem 4rem;
 
-  .plan-card {
-    border: 2px solid var(--border); border-radius: 10px;
-    padding: 1rem 1.2rem; cursor: pointer; transition: all 0.2s;
-    display: flex; align-items: center; gap: 1rem;
-    background: var(--off); position: relative;
-  }
-  .plan-card:hover { border-color: var(--navy); background: white; }
-  .plan-card.selected { border-color: var(--navy); background: #eef1f8; }
+}
 
-  .plan-radio {
-    width: 18px; height: 18px; border-radius: 50%;
-    border: 2px solid var(--border); flex-shrink: 0;
-    transition: all 0.2s; display: flex; align-items: center; justify-content: center;
-  }
-  .plan-card.selected .plan-radio { border-color: var(--navy); background: var(--navy); }
-  .plan-card.selected .plan-radio::after {
-    content: ''; width: 6px; height: 6px; border-radius: 50%; background: white;
-  }
 
-  .plan-info { flex: 1; }
-  .plan-name { font-size: 0.9rem; font-weight: 700; color: var(--navy); margin-bottom: 0.1rem; }
-  .plan-tags-count { font-size: 0.72rem; color: var(--muted); font-weight: 500; }
 
-  .plan-precio { text-align: right; flex-shrink: 0; }
-  .plan-setup { font-size: 0.78rem; color: var(--muted); display: block; }
-  .plan-mensual { font-size: 1rem; font-weight: 800; color: var(--navy); display: block; }
-  .plan-mensual span { font-size: 0.7rem; font-weight: 500; color: var(--muted); }
+.header { text-align: center; margin-bottom: 2.5rem; }
 
-  .plan-popular-badge {
-    position: absolute; top: 0.5rem; right: 0.7rem;
-    background: var(--navy); color: white;
-    font-size: 0.6rem; font-weight: 700;
-    padding: 0.15rem 0.5rem; border-radius: 8px;
-    text-transform: uppercase; letter-spacing: 0.05rem;
-  }
 
-  /* RESUMEN */
-  .resumen-box {
-    background: var(--off); border: 1px solid var(--border);
-    border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 1rem;
-  }
-  .resumen-label {
-    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12rem;
-    text-transform: uppercase; color: var(--muted); margin-bottom: 0.6rem;
-  }
-  .resumen-plan { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.2rem; }
-  .resumen-precios { font-size: 0.82rem; color: var(--muted); }
-  .resumen-precios strong { color: var(--navy); }
-  .iva-note { font-size: 0.72rem; color: var(--muted); margin-top: 0.3rem; font-style: italic; display: none; }
 
-  /* CÓDIGO ASESOR */
-  .codigo-wrap {
-    margin-bottom: 1.2rem;
-  }
-  .codigo-input-wrap { position: relative; }
-  .codigo-input-wrap input {
-    padding-left: 2.4rem;
-    border-style: dashed;
-  }
-  .codigo-icon {
-    position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%);
-    font-size: 1rem; pointer-events: none;
-  }
-  .codigo-success {
-    font-size: 0.78rem; color: var(--green); font-weight: 600;
-    margin-top: 0.4rem; display: none;
-    padding: 0.4rem 0.7rem; background: var(--green-light);
-    border-radius: 6px; border: 1px solid #bbf7d0;
-  }
+.logo-mark {
 
-  /* FACTURA TOGGLE */
-  .factura-label-row { margin-bottom: 0.6rem; }
-  .factura-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+display: inline-block;
 
-  .toggle-btn {
-    padding: 0.9rem 0.7rem; border: 2px solid var(--border);
-    border-radius: 10px; background: var(--off);
-    cursor: pointer; text-align: center;
-    transition: all 0.2s; font-family: inherit;
-  }
-  .toggle-btn .icon { font-size: 1.3rem; display: block; margin-bottom: 0.3rem; }
-  .toggle-btn .lbl { font-size: 0.8rem; font-weight: 700; color: var(--text); display: block; line-height: 1.2; }
-  .toggle-btn .sub { font-size: 0.68rem; color: var(--muted); display: block; margin-top: 0.3rem; line-height: 1.3; }
-  .toggle-btn:hover { border-color: var(--navy); background: white; }
+background: var(--navy);
 
-  /* Tarifa Promocional = verde (por defecto) */
-  .toggle-btn.selected-promo { border-color: var(--green); background: var(--green-light); }
-  .toggle-btn.selected-promo .lbl { color: var(--green); }
+color: white;
 
-  /* Tarifa Corporativa = navy */
-  .toggle-btn.selected-corp { border-color: var(--navy); background: #eef1f8; }
-  .toggle-btn.selected-corp .lbl { color: var(--navy); }
+font-size: 0.9rem;
 
-  /* FACTURA FIELDS */
-  .factura-fields {
-    background: var(--off); border: 1px solid var(--border);
-    border-radius: 10px; padding: 1.2rem;
-    display: none; animation: slideDown 0.25s ease;
-  }
-  .factura-fields.show { display: block; }
+font-weight: 800;
 
-  @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+padding: 0.3rem 0.7rem;
 
-  .factura-section-label {
-    font-size: 0.72rem; font-weight: 700; color: var(--navy);
-    margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.08rem;
-  }
+border-radius: 4px;
 
-  /* BUTTONS */
-  .nav-buttons {
-    display: flex; gap: 0.8rem; margin-top: 1.5rem;
-    padding-top: 1.2rem; border-top: 1px solid var(--border);
-  }
+letter-spacing: 0.05rem;
 
-  .btn-back {
-    padding: 0.75rem 1.2rem; border: 1.5px solid var(--border);
-    border-radius: 8px; background: none; color: var(--muted);
-    font-size: 0.85rem; font-weight: 600; cursor: pointer;
-    transition: all 0.15s; font-family: inherit;
-  }
-  .btn-back:hover { border-color: var(--navy); color: var(--navy); }
+margin-bottom: 1.2rem;
 
-  .btn-next {
-    flex: 1; padding: 0.85rem; background: var(--navy); color: white;
-    border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 700;
-    cursor: pointer; transition: background 0.15s; font-family: inherit;
-  }
-  .btn-next:hover { background: var(--navy-mid); }
+}
 
-  .btn-submit {
-    flex: 1; padding: 0.85rem; background: var(--red); color: white;
-    border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 700;
-    cursor: pointer; transition: background 0.15s; font-family: inherit;
-  }
-  .btn-submit:hover { background: #c4251c; }
+.logo-mark span { color: var(--red); }
 
-  /* SUCCESS */
-  .success-screen { text-align: center; padding: 2.5rem 1rem; display: none; }
-  .success-icon {
-    width: 70px; height: 70px; background: var(--green-light);
-    border-radius: 50%; display: flex; align-items: center;
-    justify-content: center; font-size: 2rem;
-    margin: 0 auto 1.2rem; border: 2px solid #bbf7d0;
-  }
-  .success-screen h2 { font-size: 1.3rem; font-weight: 700; color: var(--navy); margin-bottom: 0.5rem; }
-  .success-screen p { color: var(--muted); font-size: 0.88rem; line-height: 1.6; max-width: 340px; margin: 0 auto 0.5rem; }
-  .success-plan {
-    display: inline-block; background: var(--navy); color: white;
-    padding: 0.4rem 1rem; border-radius: 20px;
-    font-size: 0.82rem; font-weight: 700; margin: 1rem 0;
-  }
 
-  .page { display: none; }
-  .page.active { display: block; }
 
-  @media (max-width: 480px) {
-    .card { padding: 1.4rem; }
-    .form-row { grid-template-columns: 1fr; }
-    .factura-toggle { grid-template-columns: 1fr; }
-  }
+.header h1 {
+
+font-size: clamp(1.4rem, 4vw, 2rem);
+
+font-weight: 700;
+
+color: var(--navy);
+
+margin-bottom: 0.5rem;
+
+}
+
+
+
+.header p {
+
+color: var(--muted);
+
+font-size: 0.88rem;
+
+max-width: 420px;
+
+margin: 0 auto;
+
+line-height: 1.6;
+
+}
+
+
+
+/* PROGRESS */
+
+.progress-wrap { max-width: 580px; margin: 0 auto 2rem; }
+
+.progress-steps { display: flex; align-items: center; justify-content: center; }
+
+
+
+.step { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; flex: 1; }
+
+
+
+.step-dot {
+
+width: 28px; height: 28px; border-radius: 50%;
+
+background: var(--border);
+
+display: flex; align-items: center; justify-content: center;
+
+font-size: 0.7rem; font-weight: 700; color: var(--muted);
+
+transition: all 0.3s; position: relative; z-index: 1;
+
+}
+
+.step.active .step-dot { background: var(--navy); color: white; }
+
+.step.done .step-dot { background: var(--green); color: white; }
+
+
+
+.step-label { font-size: 0.65rem; color: var(--muted); font-weight: 500; text-align: center; white-space: nowrap; }
+
+.step.active .step-label { color: var(--navy); font-weight: 700; }
+
+.step.done .step-label { color: var(--green); }
+
+
+
+.step-line { flex: 1; height: 2px; background: var(--border); margin-top: -14px; transition: background 0.3s; }
+
+.step-line.done { background: var(--green); }
+
+
+
+/* CARD */
+
+.card {
+
+background: white; border: 1px solid var(--border); border-radius: 12px;
+
+padding: 2rem; max-width: 580px; margin: 0 auto;
+
+box-shadow: 0 2px 16px rgba(27,42,74,0.06);
+
+}
+
+
+
+.section-header { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+
+
+
+.section-label {
+
+font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15rem;
+
+text-transform: uppercase; color: var(--red); margin-bottom: 0.3rem;
+
+}
+
+.section-title { font-size: 1.1rem; font-weight: 700; color: var(--navy); }
+
+
+
+/* FORM */
+
+.form-group { margin-bottom: 1.1rem; }
+
+
+
+label.field-label {
+
+display: block; font-size: 0.78rem; font-weight: 600;
+
+color: var(--navy); margin-bottom: 0.35rem;
+
+}
+
+
+
+.req { color: var(--red); }
+
+.opt { color: var(--muted); font-weight: 400; font-size: 0.72rem; }
+
+
+
+input[type="text"],
+
+input[type="email"],
+
+input[type="tel"],
+
+input[type="url"],
+
+select {
+
+width: 100%; padding: 0.65rem 0.85rem;
+
+border: 1.5px solid var(--border); border-radius: 8px;
+
+font-size: 0.88rem; font-family: inherit; color: var(--text);
+
+background: var(--off);
+
+transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+
+outline: none; -webkit-appearance: none;
+
+}
+
+
+
+input:focus, select:focus {
+
+border-color: var(--navy); background: white;
+
+box-shadow: 0 0 0 3px rgba(27,42,74,0.08);
+
+}
+
+
+
+input.error, select.error {
+
+border-color: var(--red);
+
+box-shadow: 0 0 0 3px rgba(230,51,41,0.08);
+
+}
+
+
+
+.error-msg { font-size: 0.72rem; color: var(--red); margin-top: 0.3rem; display: none; }
+
+.hint { font-size: 0.72rem; color: var(--muted); margin-top: 0.3rem; line-height: 1.4; }
+
+
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+
+
+/* PLANES */
+
+.planes-grid { display: flex; flex-direction: column; gap: 0.6rem; }
+
+
+
+.plan-card {
+
+border: 2px solid var(--border); border-radius: 10px;
+
+padding: 1rem 1.2rem; cursor: pointer; transition: all 0.2s;
+
+display: flex; align-items: center; gap: 1rem;
+
+background: var(--off); position: relative;
+
+}
+
+.plan-card:hover { border-color: var(--navy); background: white; }
+
+.plan-card.selected { border-color: var(--navy); background: #eef1f8; }
+
+
+
+.plan-radio {
+
+width: 18px; height: 18px; border-radius: 50%;
+
+border: 2px solid var(--border); flex-shrink: 0;
+
+transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+
+}
+
+.plan-card.selected .plan-radio { border-color: var(--navy); background: var(--navy); }
+
+.plan-card.selected .plan-radio::after {
+
+content: ''; width: 6px; height: 6px; border-radius: 50%; background: white;
+
+}
+
+
+
+.plan-info { flex: 1; }
+
+.plan-name { font-size: 0.9rem; font-weight: 700; color: var(--navy); margin-bottom: 0.1rem; }
+
+.plan-tags-count { font-size: 0.72rem; color: var(--muted); font-weight: 500; }
+
+
+
+.plan-precio { text-align: right; flex-shrink: 0; }
+
+.plan-setup { font-size: 0.78rem; color: var(--muted); display: block; }
+
+.plan-mensual { font-size: 1rem; font-weight: 800; color: var(--navy); display: block; }
+
+.plan-mensual span { font-size: 0.7rem; font-weight: 500; color: var(--muted); }
+
+
+
+.plan-popular-badge {
+
+position: absolute; top: 0.5rem; right: 0.7rem;
+
+background: var(--navy); color: white;
+
+font-size: 0.6rem; font-weight: 700;
+
+padding: 0.15rem 0.5rem; border-radius: 8px;
+
+text-transform: uppercase; letter-spacing: 0.05rem;
+
+}
+
+
+
+/* RESUMEN */
+
+.resumen-box {
+
+background: var(--off); border: 1px solid var(--border);
+
+border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 1rem;
+
+}
+
+.resumen-label {
+
+font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12rem;
+
+text-transform: uppercase; color: var(--muted); margin-bottom: 0.6rem;
+
+}
+
+.resumen-plan { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.2rem; }
+
+.resumen-precios { font-size: 0.82rem; color: var(--muted); }
+
+.resumen-precios strong { color: var(--navy); }
+
+.iva-note { font-size: 0.72rem; color: var(--muted); margin-top: 0.3rem; font-style: italic; display: none; }
+
+
+
+/* CÓDIGO ASESOR */
+
+.codigo-wrap {
+
+margin-bottom: 1.2rem;
+
+}
+
+.codigo-input-wrap { position: relative; }
+
+.codigo-input-wrap input {
+
+padding-left: 2.4rem;
+
+border-style: dashed;
+
+}
+
+.codigo-icon {
+
+position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%);
+
+font-size: 1rem; pointer-events: none;
+
+}
+
+.codigo-success {
+
+font-size: 0.78rem; color: var(--green); font-weight: 600;
+
+margin-top: 0.4rem; display: none;
+
+padding: 0.4rem 0.7rem; background: var(--green-light);
+
+border-radius: 6px; border: 1px solid #bbf7d0;
+
+}
+
+
+
+/* FACTURA TOGGLE */
+
+.factura-label-row { margin-bottom: 0.6rem; }
+
+.factura-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+
+
+
+.toggle-btn {
+
+padding: 0.9rem 0.7rem; border: 2px solid var(--border);
+
+border-radius: 10px; background: var(--off);
+
+cursor: pointer; text-align: center;
+
+transition: all 0.2s; font-family: inherit;
+
+}
+
+.toggle-btn .icon { font-size: 1.3rem; display: block; margin-bottom: 0.3rem; }
+
+.toggle-btn .lbl { font-size: 0.8rem; font-weight: 700; color: var(--text); display: block; line-height: 1.2; }
+
+.toggle-btn .sub { font-size: 0.68rem; color: var(--muted); display: block; margin-top: 0.3rem; line-height: 1.3; }
+
+.toggle-btn:hover { border-color: var(--navy); background: white; }
+
+
+
+/* Tarifa Promocional = verde (por defecto) */
+
+.toggle-btn.selected-promo { border-color: var(--green); background: var(--green-light); }
+
+.toggle-btn.selected-promo .lbl { color: var(--green); }
+
+
+
+/* Tarifa Corporativa = navy */
+
+.toggle-btn.selected-corp { border-color: var(--navy); background: #eef1f8; }
+
+.toggle-btn.selected-corp .lbl { color: var(--navy); }
+
+
+
+/* FACTURA FIELDS */
+
+.factura-fields {
+
+background: var(--off); border: 1px solid var(--border);
+
+border-radius: 10px; padding: 1.2rem;
+
+display: none; animation: slideDown 0.25s ease;
+
+}
+
+.factura-fields.show { display: block; }
+
+
+
+@keyframes slideDown {
+
+from { opacity: 0; transform: translateY(-8px); }
+
+to { opacity: 1; transform: translateY(0); }
+
+}
+
+
+
+.factura-section-label {
+
+font-size: 0.72rem; font-weight: 700; color: var(--navy);
+
+margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.08rem;
+
+}
+
+
+
+/* BUTTONS */
+
+.nav-buttons {
+
+display: flex; gap: 0.8rem; margin-top: 1.5rem;
+
+padding-top: 1.2rem; border-top: 1px solid var(--border);
+
+}
+
+
+
+.btn-back {
+
+padding: 0.75rem 1.2rem; border: 1.5px solid var(--border);
+
+border-radius: 8px; background: none; color: var(--muted);
+
+font-size: 0.85rem; font-weight: 600; cursor: pointer;
+
+transition: all 0.15s; font-family: inherit;
+
+}
+
+.btn-back:hover { border-color: var(--navy); color: var(--navy); }
+
+
+
+.btn-next {
+
+flex: 1; padding: 0.85rem; background: var(--navy); color: white;
+
+border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 700;
+
+cursor: pointer; transition: background 0.15s; font-family: inherit;
+
+}
+
+.btn-next:hover { background: var(--navy-mid); }
+
+
+
+.btn-submit {
+
+flex: 1; padding: 0.85rem; background: var(--red); color: white;
+
+border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 700;
+
+cursor: pointer; transition: background 0.15s; font-family: inherit;
+
+}
+
+.btn-submit:hover { background: #c4251c; }
+
+
+
+/* SUCCESS */
+
+.success-screen { text-align: center; padding: 2.5rem 1rem; display: none; }
+
+.success-icon {
+
+width: 70px; height: 70px; background: var(--green-light);
+
+border-radius: 50%; display: flex; align-items: center;
+
+justify-content: center; font-size: 2rem;
+
+margin: 0 auto 1.2rem; border: 2px solid #bbf7d0;
+
+}
+
+.success-screen h2 { font-size: 1.3rem; font-weight: 700; color: var(--navy); margin-bottom: 0.5rem; }
+
+.success-screen p { color: var(--muted); font-size: 0.88rem; line-height: 1.6; max-width: 340px; margin: 0 auto 0.5rem; }
+
+.success-plan {
+
+display: inline-block; background: var(--navy); color: white;
+
+padding: 0.4rem 1rem; border-radius: 20px;
+
+font-size: 0.82rem; font-weight: 700; margin: 1rem 0;
+
+}
+
+
+
+.page { display: none; }
+
+.page.active { display: block; }
+
+
+
+@media (max-width: 480px) {
+
+.card { padding: 1.4rem; }
+
+.form-row { grid-template-columns: 1fr; }
+
+.factura-toggle { grid-template-columns: 1fr; }
+
+}
+
 </style>
+
 </head>
+
 <body>
 
+
+
 <div class="header">
-  <div class="logo-mark">MC<span>smart</span></div>
-  <h1>Contratar MCTags NFC</h1>
-  <p>Rellena el formulario y en menos de 24h te configuramos tus etiquetas y te las enviamos.</p>
+
+<div class="logo-mark">MC<span>smart</span></div>
+
+<h1>Contratar MCTags NFC</h1>
+
+<p>Rellena el formulario y en menos de 24h te configuramos tus etiquetas y te las enviamos.</p>
+
 </div>
 
+
+
 <!-- PROGRESS -->
+
 <div class="progress-wrap" id="progressWrap">
-  <div class="progress-steps">
-    <div class="step active" id="step1">
-      <div class="step-dot">1</div>
-      <div class="step-label">Tu negocio</div>
-    </div>
-    <div class="step-line" id="line1"></div>
-    <div class="step" id="step2">
-      <div class="step-dot">2</div>
-      <div class="step-label">Plan</div>
-    </div>
-    <div class="step-line" id="line2"></div>
-    <div class="step" id="step3">
-      <div class="step-dot">3</div>
-      <div class="step-label">Facturación</div>
-    </div>
-  </div>
+
+<div class="progress-steps">
+
+<div class="step active" id="step1">
+
+<div class="step-dot">1</div>
+
+<div class="step-label">Tu negocio</div>
+
 </div>
+
+<div class="step-line" id="line1"></div>
+
+<div class="step" id="step2">
+
+<div class="step-dot">2</div>
+
+<div class="step-label">Plan</div>
+
+</div>
+
+<div class="step-line" id="line2"></div>
+
+<div class="step" id="step3">
+
+<div class="step-dot">3</div>
+
+<div class="step-label">Facturación</div>
+
+</div>
+
+</div>
+
+</div>
+
+
 
 <div class="card" id="mainCard">
 
-  <!-- PÁGINA 1: DATOS DEL NEGOCIO -->
-  <div class="page active" id="page1">
-    <div class="section-header">
-      <div class="section-label">Paso 1 de 3</div>
-      <div class="section-title">Datos de tu negocio</div>
-    </div>
 
-    <div class="form-group">
-      <label class="field-label">Nombre del negocio <span class="req">*</span></label>
-      <input type="text" id="neg_nombre" placeholder="Ej: Bar El Rincón"/>
-      <div class="error-msg" id="err_neg_nombre">Este campo es obligatorio</div>
-    </div>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label class="field-label">Teléfono / WhatsApp <span class="req">*</span></label>
-        <input type="tel" id="neg_telefono" placeholder="+34 6XX XXX XXX"/>
-        <div class="error-msg" id="err_neg_telefono">Introduce un teléfono válido</div>
-      </div>
-      <div class="form-group">
-        <label class="field-label">Email <span class="opt">(opcional)</span></label>
-        <input type="email" id="neg_email" placeholder="info@tunegocio.com"/>
-      </div>
-    </div>
+<!-- PÁGINA 1: DATOS DEL NEGOCIO -->
 
-    <div class="form-row">
-      <div class="form-group">
-        <label class="field-label">Ciudad <span class="req">*</span></label>
-        <input type="text" id="neg_ciudad" placeholder="Ej: Valencia"/>
-        <div class="error-msg" id="err_neg_ciudad">Introduce la ciudad</div>
-      </div>
-      <div class="form-group">
-        <label class="field-label">Tipo de negocio <span class="opt">(opcional)</span></label>
-        <select id="neg_tipo">
-          <option value="">Selecciona...</option>
-          <option>Bar / Cafetería</option>
-          <option>Restaurante</option>
-          <option>Estudio de tatuajes</option>
-          <option>Peluquería / Barbería</option>
-          <option>Clínica / Estética</option>
-          <option>Gimnasio</option>
-          <option>Tienda / Comercio</option>
-          <option>Hotel / Alojamiento</option>
-          <option>Otro</option>
-        </select>
-      </div>
-    </div>
+<div class="page active" id="page1">
 
-    <div class="form-group">
-      <label class="field-label">Enlace a tu ficha de Google Maps <span class="opt">(opcional)</span></label>
-      <input type="url" id="neg_gmaps" placeholder="Para configurar las reseñas directas"/>
-    </div>
+<div class="section-header">
 
-    <div class="form-group">
-      <label class="field-label">Enlace a tu Carta Digital o Web <span class="opt">(opcional)</span></label>
-      <input type="url" id="neg_carta" placeholder="Para vincular tu menú o web corporativa"/>
-    </div>
+<div class="section-label">Paso 1 de 3</div>
 
-    <div class="nav-buttons">
-      <button class="btn-next" onclick="irPagina(2)">Siguiente → Elegir plan</button>
-    </div>
-  </div>
-
-  <!-- PÁGINA 2: PLAN -->
-  <div class="page" id="page2">
-    <div class="section-header">
-      <div class="section-label">Paso 2 de 3</div>
-      <div class="section-title">Elige tu plan</div>
-    </div>
-
-    <div class="planes-grid">
-
-      <div class="plan-card" data-plan="MC Go" data-setup="49" data-mensual="15" data-tags="20" onclick="seleccionarPlan(this)">
-        <div class="plan-radio"></div>
-        <div class="plan-info">
-          <div class="plan-name">MC Go</div>
-          <div class="plan-tags-count">20 MCTags incluidas</div>
-        </div>
-        <div class="plan-precio">
-          <span class="plan-setup">49€ pago inicial</span>
-          <span class="plan-mensual">15€ <span>/ mes</span></span>
-        </div>
-      </div>
-
-      <div class="plan-card" data-plan="MC Extra" data-setup="69" data-mensual="25" data-tags="35" onclick="seleccionarPlan(this)">
-        <div class="plan-radio"></div>
-        <div class="plan-info">
-          <div class="plan-name">MC Extra</div>
-          <div class="plan-tags-count">35 MCTags incluidas</div>
-        </div>
-        <div class="plan-precio">
-          <span class="plan-setup">69€ pago inicial</span>
-          <span class="plan-mensual">25€ <span>/ mes</span></span>
-        </div>
-        <div class="plan-popular-badge">Más popular</div>
-      </div>
-
-      <div class="plan-card" data-plan="MC Pro" data-setup="99" data-mensual="35" data-tags="50" onclick="seleccionarPlan(this)">
-        <div class="plan-radio"></div>
-        <div class="plan-info">
-          <div class="plan-name">MC Pro</div>
-          <div class="plan-tags-count">50 MCTags incluidas</div>
-        </div>
-        <div class="plan-precio">
-          <span class="plan-setup">99€ pago inicial</span>
-          <span class="plan-mensual">35€ <span>/ mes</span></span>
-        </div>
-      </div>
-
-      <div class="plan-card" data-plan="MC Enterprise" data-setup="149" data-mensual="50" data-tags="100" onclick="seleccionarPlan(this)">
-        <div class="plan-radio"></div>
-        <div class="plan-info">
-          <div class="plan-name">MC Enterprise</div>
-          <div class="plan-tags-count">Hasta 100 MCTags</div>
-        </div>
-        <div class="plan-precio">
-          <span class="plan-setup">149€ pago inicial</span>
-          <span class="plan-mensual">50€ <span>/ mes</span></span>
-        </div>
-      </div>
-
-    </div>
-    <div class="error-msg" id="err_plan" style="margin-top:0.5rem;">Selecciona un plan para continuar</div>
-
-    <div class="nav-buttons">
-      <button class="btn-back" onclick="irPagina(1)">← Atrás</button>
-      <button class="btn-next" onclick="irPagina(3)">Siguiente → Facturación</button>
-    </div>
-  </div>
-
-  <!-- PÁGINA 3: FACTURACIÓN -->
-  <div class="page" id="page3">
-    <div class="section-header">
-      <div class="section-label">Paso 3 de 3</div>
-      <div class="section-title">Facturación</div>
-    </div>
-
-    <!-- RESUMEN -->
-    <div class="resumen-box" id="resumenBox">
-      <div class="resumen-label">Plan seleccionado</div>
-      <div class="resumen-plan" id="resumenNombre">—</div>
-      <div class="resumen-precios" id="resumenPrecios">—</div>
-      <div class="iva-note" id="ivaNote">IVA e impuestos incluidos</div>
-    </div>
-
-    <!-- CÓDIGO ASESOR -->
-    <div class="codigo-wrap">
-      <label class="field-label">¿Dispones de un código de asesor autorizado? <span class="opt">(opcional)</span></label>
-      <div class="codigo-input-wrap">
-        <span class="codigo-icon">🔑</span>
-        <input type="text" id="codigoAsesor" placeholder="Introduce el código si te lo ha facilitado tu asesor" oninput="comprobarCodigo()"/>
-      </div>
-      <div class="codigo-success" id="codigoSuccess">¡Código de asesor aplicado! Se ha activado la tarifa exclusiva MC Lite (5 MCTags).</div>
-    </div>
-
-    <!-- FACTURA TOGGLE -->
-    <div class="factura-label-row">
-      <label class="field-label">Selecciona tu modalidad de pago <span class="req">*</span></label>
-    </div>
-
-    <div class="factura-toggle">
-      <button class="toggle-btn" id="btnPromo" onclick="setFactura('promo')">
-        <span class="icon">👌</span>
-        <span class="lbl">Tarifa Promocional Directa</span>
-        <span class="sub">Pago rápido (Bizum/Efectivo). Ahorra el recargo administrativo.</span>
-      </button>
-      <button class="toggle-btn" id="btnCorp" onclick="setFactura('corp')">
-        <span class="icon">🧾</span>
-        <span class="lbl">Tarifa Corporativa (+21%)</span>
-        <span class="sub">Requiere Factura Completa y procesamiento de datos fiscales (CIF).</span>
-      </button>
-    </div>
-    <div class="error-msg" id="err_factura" style="margin-top:-0.5rem; margin-bottom:1rem;">Selecciona una modalidad de pago</div>
-
-    <!-- CAMPOS FACTURA CORPORATIVA -->
-    <div class="factura-fields" id="facturaFields">
-      <div class="factura-section-label">Datos de facturación</div>
-
-      <div class="form-group">
-        <label class="field-label">Razón social o nombre completo <span class="req">*</span></label>
-        <input type="text" id="fact_nombre" placeholder="Ej: Bar El Rincón S.L. / Juan García López"/>
-        <div class="error-msg" id="err_fact_nombre">Este campo es obligatorio</div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label class="field-label">CIF / NIF <span class="req">*</span></label>
-          <input type="text" id="fact_cif" placeholder="Ej: B12345678"/>
-          <div class="error-msg" id="err_fact_cif">Introduce el CIF o NIF</div>
-        </div>
-        <div class="form-group">
-          <label class="field-label">Email para facturas <span class="req">*</span></label>
-          <input type="email" id="fact_email" placeholder="admin@empresa.com"/>
-          <div class="error-msg" id="err_fact_email">Introduce un email válido</div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="field-label">Dirección fiscal <span class="req">*</span></label>
-        <input type="text" id="fact_direccion" placeholder="Calle, número, CP, ciudad"/>
-        <div class="error-msg" id="err_fact_direccion">Introduce la dirección fiscal</div>
-      </div>
-    </div>
-
-    <div class="nav-buttons">
-      <button class="btn-back" onclick="irPagina(2)">← Atrás</button>
-      <button class="btn-submit" onclick="enviar()">Enviar pedido ✓</button>
-    </div>
-  </div>
+<div class="section-title">Datos de tu negocio</div>
 
 </div>
+
+
+
+<div class="form-group">
+
+<label class="field-label">Nombre del negocio <span class="req">*</span></label>
+
+<input type="text" id="neg_nombre" placeholder="Ej: Bar El Rincón"/>
+
+<div class="error-msg" id="err_neg_nombre">Este campo es obligatorio</div>
+
+</div>
+
+
+
+<div class="form-row">
+
+<div class="form-group">
+
+<label class="field-label">Teléfono / WhatsApp <span class="req">*</span></label>
+
+<input type="tel" id="neg_telefono" placeholder="+34 6XX XXX XXX"/>
+
+<div class="error-msg" id="err_neg_telefono">Introduce un teléfono válido</div>
+
+</div>
+
+<div class="form-group">
+
+<label class="field-label">Email <span class="opt">(opcional)</span></label>
+
+<input type="email" id="neg_email" placeholder="info@tunegocio.com"/>
+
+</div>
+
+</div>
+
+
+
+<div class="form-row">
+
+<div class="form-group">
+
+<label class="field-label">Ciudad <span class="req">*</span></label>
+
+<input type="text" id="neg_ciudad" placeholder="Ej: Valencia"/>
+
+<div class="error-msg" id="err_neg_ciudad">Introduce la ciudad</div>
+
+</div>
+
+<div class="form-group">
+
+<label class="field-label">Tipo de negocio <span class="opt">(opcional)</span></label>
+
+<select id="neg_tipo">
+
+<option value="">Selecciona...</option>
+
+<option>Bar / Cafetería</option>
+
+<option>Restaurante</option>
+
+<option>Estudio de tatuajes</option>
+
+<option>Peluquería / Barbería</option>
+
+<option>Clínica / Estética</option>
+
+<option>Gimnasio</option>
+
+<option>Tienda / Comercio</option>
+
+<option>Hotel / Alojamiento</option>
+
+<option>Otro</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label class="field-label">Enlace a tu ficha de Google Maps <span class="opt">(opcional)</span></label>
+
+<input type="url" id="neg_gmaps" placeholder="Para configurar las reseñas directas"/>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label class="field-label">Enlace a tu Carta Digital o Web <span class="opt">(opcional)</span></label>
+
+<input type="url" id="neg_carta" placeholder="Para vincular tu menú o web corporativa"/>
+
+</div>
+
+
+
+<div class="nav-buttons">
+
+<button class="btn-next" onclick="irPagina(2)">Siguiente → Elegir plan</button>
+
+</div>
+
+</div>
+
+
+
+<!-- PÁGINA 2: PLAN -->
+
+<div class="page" id="page2">
+
+<div class="section-header">
+
+<div class="section-label">Paso 2 de 3</div>
+
+<div class="section-title">Elige tu plan</div>
+
+</div>
+
+
+
+<div class="planes-grid">
+
+
+
+<div class="plan-card" data-plan="MC Go" data-setup="49" data-mensual="15" data-tags="20" onclick="seleccionarPlan(this)">
+
+<div class="plan-radio"></div>
+
+<div class="plan-info">
+
+<div class="plan-name">MC Go</div>
+
+<div class="plan-tags-count">20 MCTags incluidas</div>
+
+</div>
+
+<div class="plan-precio">
+
+<span class="plan-setup">49€ pago inicial</span>
+
+<span class="plan-mensual">15€ <span>/ mes</span></span>
+
+</div>
+
+</div>
+
+
+
+<div class="plan-card" data-plan="MC Extra" data-setup="69" data-mensual="25" data-tags="35" onclick="seleccionarPlan(this)">
+
+<div class="plan-radio"></div>
+
+<div class="plan-info">
+
+<div class="plan-name">MC Extra</div>
+
+<div class="plan-tags-count">35 MCTags incluidas</div>
+
+</div>
+
+<div class="plan-precio">
+
+<span class="plan-setup">69€ pago inicial</span>
+
+<span class="plan-mensual">25€ <span>/ mes</span></span>
+
+</div>
+
+<div class="plan-popular-badge">Más popular</div>
+
+</div>
+
+
+
+<div class="plan-card" data-plan="MC Pro" data-setup="99" data-mensual="35" data-tags="50" onclick="seleccionarPlan(this)">
+
+<div class="plan-radio"></div>
+
+<div class="plan-info">
+
+<div class="plan-name">MC Pro</div>
+
+<div class="plan-tags-count">50 MCTags incluidas</div>
+
+</div>
+
+<div class="plan-precio">
+
+<span class="plan-setup">99€ pago inicial</span>
+
+<span class="plan-mensual">35€ <span>/ mes</span></span>
+
+</div>
+
+</div>
+
+
+
+<div class="plan-card" data-plan="MC Enterprise" data-setup="149" data-mensual="50" data-tags="100" onclick="seleccionarPlan(this)">
+
+<div class="plan-radio"></div>
+
+<div class="plan-info">
+
+<div class="plan-name">MC Enterprise</div>
+
+<div class="plan-tags-count">Hasta 100 MCTags</div>
+
+</div>
+
+<div class="plan-precio">
+
+<span class="plan-setup">149€ pago inicial</span>
+
+<span class="plan-mensual">50€ <span>/ mes</span></span>
+
+</div>
+
+</div>
+
+
+
+</div>
+
+<div class="error-msg" id="err_plan" style="margin-top:0.5rem;">Selecciona un plan para continuar</div>
+
+
+
+<div class="nav-buttons">
+
+<button class="btn-back" onclick="irPagina(1)">← Atrás</button>
+
+<button class="btn-next" onclick="irPagina(3)">Siguiente → Facturación</button>
+
+</div>
+
+</div>
+
+
+
+<!-- PÁGINA 3: FACTURACIÓN -->
+
+<div class="page" id="page3">
+
+<div class="section-header">
+
+<div class="section-label">Paso 3 de 3</div>
+
+<div class="section-title">Facturación</div>
+
+</div>
+
+
+
+<!-- RESUMEN -->
+
+<div class="resumen-box" id="resumenBox">
+
+<div class="resumen-label">Plan seleccionado</div>
+
+<div class="resumen-plan" id="resumenNombre">—</div>
+
+<div class="resumen-precios" id="resumenPrecios">—</div>
+
+<div class="iva-note" id="ivaNote">IVA e impuestos incluidos</div>
+
+</div>
+
+
+
+<!-- CÓDIGO ASESOR -->
+
+<div class="codigo-wrap">
+
+<label class="field-label">¿Dispones de un código de asesor autorizado? <span class="opt">(opcional)</span></label>
+
+<div class="codigo-input-wrap">
+
+<span class="codigo-icon">🔑</span>
+
+<input type="text" id="codigoAsesor" placeholder="Introduce el código si te lo ha facilitado tu asesor" oninput="comprobarCodigo()"/>
+
+</div>
+
+<div class="codigo-success" id="codigoSuccess">¡Código de asesor aplicado! Se ha activado la tarifa exclusiva MC Lite (5 MCTags).</div>
+
+</div>
+
+
+
+<!-- FACTURA TOGGLE -->
+
+<div class="factura-label-row">
+
+<label class="field-label">Selecciona tu modalidad de pago <span class="req">*</span></label>
+
+</div>
+
+
+
+<div class="factura-toggle">
+
+<button class="toggle-btn" id="btnPromo" onclick="setFactura('promo')">
+
+<span class="icon">👌</span>
+
+<span class="lbl">Tarifa Promocional Directa</span>
+
+<span class="sub">Pago rápido (Bizum/Efectivo). Ahorra el recargo administrativo.</span>
+
+</button>
+
+<button class="toggle-btn" id="btnCorp" onclick="setFactura('corp')">
+
+<span class="icon">🧾</span>
+
+<span class="lbl">Tarifa Corporativa (+21%)</span>
+
+<span class="sub">Requiere Factura Completa y procesamiento de datos fiscales (CIF).</span>
+
+</button>
+
+</div>
+
+<div class="error-msg" id="err_factura" style="margin-top:-0.5rem; margin-bottom:1rem;">Selecciona una modalidad de pago</div>
+
+
+
+<!-- CAMPOS FACTURA CORPORATIVA -->
+
+<div class="factura-fields" id="facturaFields">
+
+<div class="factura-section-label">Datos de facturación</div>
+
+
+
+<div class="form-group">
+
+<label class="field-label">Razón social o nombre completo <span class="req">*</span></label>
+
+<input type="text" id="fact_nombre" placeholder="Ej: Bar El Rincón S.L. / Juan García López"/>
+
+<div class="error-msg" id="err_fact_nombre">Este campo es obligatorio</div>
+
+</div>
+
+
+
+<div class="form-row">
+
+<div class="form-group">
+
+<label class="field-label">CIF / NIF <span class="req">*</span></label>
+
+<input type="text" id="fact_cif" placeholder="Ej: B12345678"/>
+
+<div class="error-msg" id="err_fact_cif">Introduce el CIF o NIF</div>
+
+</div>
+
+<div class="form-group">
+
+<label class="field-label">Email para facturas <span class="req">*</span></label>
+
+<input type="email" id="fact_email" placeholder="admin@empresa.com"/>
+
+<div class="error-msg" id="err_fact_email">Introduce un email válido</div>
+
+</div>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label class="field-label">Dirección fiscal <span class="req">*</span></label>
+
+<input type="text" id="fact_direccion" placeholder="Calle, número, CP, ciudad"/>
+
+<div class="error-msg" id="err_fact_direccion">Introduce la dirección fiscal</div>
+
+</div>
+
+</div>
+
+
+
+<div class="nav-buttons">
+
+<button class="btn-back" onclick="irPagina(2)">← Atrás</button>
+
+<button class="btn-submit" onclick="enviar()">Enviar pedido ✓</button>
+
+</div>
+
+</div>
+
+
+
+</div>
+
+
 
 <!-- SUCCESS -->
+
 <div class="card success-screen" id="successScreen">
-  <div class="success-icon">✓</div>
-  <h2>¡Pedido recibido!</h2>
-  <div class="success-plan" id="successPlan">—</div>
-  <p>En menos de 24h nos ponemos en contacto contigo para confirmar el pedido y coordinar el envío de tus MCTags.</p>
-  <br/>
-  <p style="font-size:0.78rem;">— El equipo de <strong>MCsmart</strong></p>
+
+<div class="success-icon">✓</div>
+
+<h2>¡Pedido recibido!</h2>
+
+<div class="success-plan" id="successPlan">—</div>
+
+<p>En menos de 24h nos ponemos en contacto contigo para confirmar el pedido y coordinar el envío de tus MCTags.</p>
+
+<br/>
+
+<p style="font-size:0.78rem;">— El equipo de <strong>MCsmart</strong></p>
+
 </div>
 
+
+
 <script>
-  // Estado global
-  let planSeleccionado = null;   // datos del plan base elegido en paso 2
-  let planEfectivo = null;       // puede ser MC Lite si aplica código
-  let facturaMode = null;        // 'promo' | 'corp'
-  let codigoAplicado = false;
 
-  const LITE = { plan: 'MC Lite', setup: 29, mensual: 5, tags: 5 };
+// Estado global
 
-  // ── NAVEGACIÓN ──────────────────────────────────────────────
-  function irPagina(num) {
-    if (num === 2 && !validarPagina1()) return;
-    if (num === 3 && !validarPagina2()) return;
+let planSeleccionado = null; // datos del plan base elegido en paso 2
 
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page' + num).classList.add('active');
+let planEfectivo = null; // puede ser MC Lite si aplica código
 
-    for (let i = 1; i <= 3; i++) {
-      const s = document.getElementById('step' + i);
-      s.classList.remove('active', 'done');
-      if (i < num) s.classList.add('done');
-      else if (i === num) s.classList.add('active');
-    }
-    for (let i = 1; i <= 2; i++) {
-      document.getElementById('line' + i).classList.toggle('done', i < num);
-    }
+let facturaMode = null; // 'promo' | 'corp'
 
-    if (num === 3) actualizarResumen();
+let codigoAplicado = false;
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
 
-  // ── SELECCIÓN DE PLAN ────────────────────────────────────────
-  function seleccionarPlan(el) {
-    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-    planSeleccionado = {
-      plan: el.dataset.plan,
-      setup: parseFloat(el.dataset.setup),
-      mensual: parseFloat(el.dataset.mensual),
-      tags: el.dataset.tags,
-    };
-    planEfectivo = { ...planSeleccionado };
-    codigoAplicado = false;
-    document.getElementById('err_plan').style.display = 'none';
-  }
 
-  // ── CÓDIGO ASESOR ────────────────────────────────────────────
-  function comprobarCodigo() {
-    const val = document.getElementById('codigoAsesor').value.trim().toLowerCase();
-    const successEl = document.getElementById('codigoSuccess');
+const LITE = { plan: 'MC Lite', setup: 29, mensual: 5, tags: 5 };
 
-    if (val === 'javi29' && planSeleccionado && planSeleccionado.plan === 'MC Go') {
-      codigoAplicado = true;
-      planEfectivo = { ...LITE };
-      successEl.style.display = 'block';
-    } else {
-      codigoAplicado = false;
-      planEfectivo = planSeleccionado ? { ...planSeleccionado } : null;
-      successEl.style.display = 'none';
-    }
 
-    if (planEfectivo) actualizarResumen();
-  }
 
-  // ── RESUMEN CON LÓGICA DE IVA ────────────────────────────────
-  function actualizarResumen() {
-    if (!planEfectivo) return;
+// ── NAVEGACIÓN ──────────────────────────────────────────────
 
-    const conIva = facturaMode === 'corp';
-    const setup = conIva ? (planEfectivo.setup * 1.21).toFixed(2) : planEfectivo.setup;
-    const mensual = conIva ? (planEfectivo.mensual * 1.21).toFixed(2) : planEfectivo.mensual;
+function irPagina(num) {
 
-    const nombreDisplay = codigoAplicado
-      ? 'MC Lite (Plan Restringido)'
-      : planEfectivo.plan;
+if (num === 2 && !validarPagina1()) return;
 
-    document.getElementById('resumenNombre').textContent = nombreDisplay;
-    document.getElementById('resumenPrecios').innerHTML =
-      `<strong>${setup}€</strong> pago inicial · <strong>${mensual}€/mes</strong> · ${planEfectivo.tags} MCTags`;
+if (num === 3 && !validarPagina2()) return;
 
-    const ivaNote = document.getElementById('ivaNote');
-    ivaNote.style.display = conIva ? 'block' : 'none';
-  }
 
-  // ── MODALIDAD FACTURA ────────────────────────────────────────
-  function setFactura(mode) {
-    facturaMode = mode;
 
-    document.getElementById('btnPromo').className = 'toggle-btn' + (mode === 'promo' ? ' selected-promo' : '');
-    document.getElementById('btnCorp').className = 'toggle-btn' + (mode === 'corp' ? ' selected-corp' : '');
-    document.getElementById('facturaFields').classList.toggle('show', mode === 'corp');
-    document.getElementById('err_factura').style.display = 'none';
+document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
 
-    actualizarResumen();
-  }
+document.getElementById('page' + num).classList.add('active');
 
-  // ── VALIDACIONES ─────────────────────────────────────────────
-  function validarPagina1() {
-    let ok = true;
-    const campos = [
-      { id: 'neg_nombre',   err: 'err_neg_nombre',   check: v => v.trim() !== '' },
-      { id: 'neg_telefono', err: 'err_neg_telefono', check: v => v.trim().length >= 9 },
-      { id: 'neg_ciudad',   err: 'err_neg_ciudad',   check: v => v.trim() !== '' },
-    ];
-    campos.forEach(c => {
-      const el = document.getElementById(c.id);
-      const err = document.getElementById(c.err);
-      const valid = c.check(el.value);
-      el.classList.toggle('error', !valid);
-      err.style.display = valid ? 'none' : 'block';
-      if (!valid) ok = false;
-    });
-    return ok;
-  }
 
-  function validarPagina2() {
-    if (!planSeleccionado) {
-      document.getElementById('err_plan').style.display = 'block';
-      return false;
-    }
-    return true;
-  }
 
-  function validarPagina3() {
-    let ok = true;
+for (let i = 1; i <= 3; i++) {
 
-    if (!facturaMode) {
-      document.getElementById('err_factura').style.display = 'block';
-      ok = false;
-    }
+const s = document.getElementById('step' + i);
 
-    if (facturaMode === 'corp') {
-      const campos = [
-        { id: 'fact_nombre',    err: 'err_fact_nombre',    check: v => v.trim() !== '' },
-        { id: 'fact_cif',       err: 'err_fact_cif',       check: v => v.trim() !== '' },
-        { id: 'fact_email',     err: 'err_fact_email',     check: v => /\S+@\S+\.\S+/.test(v) },
-        { id: 'fact_direccion', err: 'err_fact_direccion', check: v => v.trim() !== '' },
-      ];
-      campos.forEach(c => {
-        const el = document.getElementById(c.id);
-        const err = document.getElementById(c.err);
-        const valid = c.check(el.value);
-        el.classList.toggle('error', !valid);
-        err.style.display = valid ? 'none' : 'block';
-        if (!valid) ok = false;
-      });
-    }
+s.classList.remove('active', 'done');
 
-    return ok;
-  }
+if (i < num) s.classList.add('done');
 
-  // ── ENVÍO DEFINITIVO ADAPTADO A GOOGLE PARAMETERS ────────────
-  const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxTr_nJ5aXgRgvx6ndkfG9PWQdmukOiMPf8dydAtItqd9OvFcoA19M9q3BHHCRzcXnL/exec';
+else if (i === num) s.classList.add('active');
 
-  async function enviar() {
-    if (!validarPagina3()) return;
+}
 
-    const conIva = facturaMode === 'corp';
-    const setup   = conIva ? (planEfectivo.setup   * 1.21).toFixed(2) : planEfectivo.setup;
-    const mensual = conIva ? (planEfectivo.mensual * 1.21).toFixed(2) : planEfectivo.mensual;
+for (let i = 1; i <= 2; i++) {
 
-    // Estructuramos los datos usando URLSearchParams para asegurar compatibilidad total con e.parameter
-    const formData = new URLSearchParams();
-    formData.append('negocio_nombre', document.getElementById('neg_nombre').value.trim());
-    formData.append('negocio_telefono', document.getElementById('neg_telefono').value.trim());
-    formData.append('negocio_email', document.getElementById('neg_email').value.trim());
-    formData.append('negocio_ciudad', document.getElementById('neg_ciudad').value.trim());
-    formData.append('negocio_tipo', document.getElementById('neg_tipo').value);
-    formData.append('negocio_gmaps', document.getElementById('neg_gmaps').value.trim());
-    formData.append('negocio_carta', document.getElementById('neg_carta').value.trim());
-    formData.append('plan_nombre', planEfectivo.plan);
-    formData.append('plan_tags', planEfectivo.tags);
-    formData.append('plan_setup_neto', planEfectivo.setup);
-    formData.append('plan_mensual_neto', planEfectivo.mensual);
-    formData.append('plan_setup_final', setup);
-    formData.append('plan_mensual_final', mensual);
-    formData.append('plan_con_iva', conIva ? 'Sí' : 'No');
-    formData.append('plan_codigo_lite', codigoAplicado ? 'Sí' : 'No');
-    formData.append('fact_modalidad', facturaMode === 'corp' ? 'Corporativa' : 'Promocional');
-    formData.append('fact_nombre', facturaMode === 'corp' ? document.getElementById('fact_nombre').value.trim() : '');
-    formData.append('fact_cif', facturaMode === 'corp' ? document.getElementById('fact_cif').value.trim() : '');
-    formData.append('fact_email', facturaMode === 'corp' ? document.getElementById('fact_email').value.trim() : '');
-    formData.append('fact_direccion', facturaMode === 'corp' ? document.getElementById('fact_direccion').value.trim() : '');
+document.getElementById('line' + i).classList.toggle('done', i < num);
 
-    // Estado de carga en el botón
-    const btnSubmit = document.querySelector('.btn-submit');
-    const textoOriginal = btnSubmit.textContent;
-    btnSubmit.textContent = 'Enviando…';
-    btnSubmit.disabled = true;
+}
 
-    try {
-      // El navegador enviará esto de forma limpia saltando las restricciones restrictivas de CORS de Sheets
-      await fetch(SHEETS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: formData
-      });
-    } catch (e) {
-      console.warn('Error controlado de red:', e);
-    }
 
-    // Mostrar pantalla de éxito
-    const labelPlan = codigoAplicado
-      ? 'MC Lite · 5 MCTags'
-      : `${planEfectivo.plan} · ${planEfectivo.tags} MCTags`;
 
-    document.getElementById('successPlan').textContent = labelPlan;
-    document.getElementById('mainCard').style.display = 'none';
-    document.getElementById('progressWrap').style.display = 'none';
-    document.getElementById('successScreen').style.display = 'block';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+if (num === 3) actualizarResumen();
 
-    // Restaurar botón
-    btnSubmit.textContent = textoOriginal;
-    btnSubmit.disabled = false;
-  }
 
-  // Dejar preseleccionada la tarifa promocional directa al cargar la página
-  setFactura('promo');
+
+window.scrollTo({ top: 0, behavior: 'smooth' });
+
+}
+
+
+
+// ── SELECCIÓN DE PLAN ────────────────────────────────────────
+
+function seleccionarPlan(el) {
+
+document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+
+el.classList.add('selected');
+
+planSeleccionado = {
+
+plan: el.dataset.plan,
+
+setup: parseFloat(el.dataset.setup),
+
+mensual: parseFloat(el.dataset.mensual),
+
+tags: el.dataset.tags,
+
+};
+
+planEfectivo = { ...planSeleccionado };
+
+codigoAplicado = false;
+
+document.getElementById('err_plan').style.display = 'none';
+
+}
+
+
+
+// ── CÓDIGO ASESOR ────────────────────────────────────────────
+
+function comprobarCodigo() {
+
+const val = document.getElementById('codigoAsesor').value.trim().toLowerCase();
+
+const successEl = document.getElementById('codigoSuccess');
+
+
+
+if (val === 'javi29' && planSeleccionado && planSeleccionado.plan === 'MC Go') {
+
+codigoAplicado = true;
+
+planEfectivo = { ...LITE };
+
+successEl.style.display = 'block';
+
+} else {
+
+codigoAplicado = false;
+
+planEfectivo = planSeleccionado ? { ...planSeleccionado } : null;
+
+successEl.style.display = 'none';
+
+}
+
+
+
+if (planEfectivo) actualizarResumen();
+
+}
+
+
+
+// ── RESUMEN CON LÓGICA DE IVA ────────────────────────────────
+
+function actualizarResumen() {
+
+if (!planEfectivo) return;
+
+
+
+const conIva = facturaMode === 'corp';
+
+const setup = conIva ? (planEfectivo.setup * 1.21).toFixed(2) : planEfectivo.setup;
+
+const mensual = conIva ? (planEfectivo.mensual * 1.21).toFixed(2) : planEfectivo.mensual;
+
+
+
+const nombreDisplay = codigoAplicado
+
+? 'MC Lite (Plan Restringido)'
+
+: planEfectivo.plan;
+
+
+
+document.getElementById('resumenNombre').textContent = nombreDisplay;
+
+document.getElementById('resumenPrecios').innerHTML =
+
+`<strong>${setup}€</strong> pago inicial · <strong>${mensual}€/mes</strong> · ${planEfectivo.tags} MCTags`;
+
+
+
+const ivaNote = document.getElementById('ivaNote');
+
+ivaNote.style.display = conIva ? 'block' : 'none';
+
+}
+
+
+
+// ── MODALIDAD FACTURA ────────────────────────────────────────
+
+function setFactura(mode) {
+
+facturaMode = mode;
+
+
+
+document.getElementById('btnPromo').className = 'toggle-btn' + (mode === 'promo' ? ' selected-promo' : '');
+
+document.getElementById('btnCorp').className = 'toggle-btn' + (mode === 'corp' ? ' selected-corp' : '');
+
+document.getElementById('facturaFields').classList.toggle('show', mode === 'corp');
+
+document.getElementById('err_factura').style.display = 'none';
+
+
+
+actualizarResumen();
+
+}
+
+
+
+// ── VALIDACIONES ─────────────────────────────────────────────
+
+function validarPagina1() {
+
+let ok = true;
+
+const campos = [
+
+{ id: 'neg_nombre', err: 'err_neg_nombre', check: v => v.trim() !== '' },
+
+{ id: 'neg_telefono', err: 'err_neg_telefono', check: v => v.trim().length >= 9 },
+
+{ id: 'neg_ciudad', err: 'err_neg_ciudad', check: v => v.trim() !== '' },
+
+];
+
+campos.forEach(c => {
+
+const el = document.getElementById(c.id);
+
+const err = document.getElementById(c.err);
+
+const valid = c.check(el.value);
+
+el.classList.toggle('error', !valid);
+
+err.style.display = valid ? 'none' : 'block';
+
+if (!valid) ok = false;
+
+});
+
+return ok;
+
+}
+
+
+
+function validarPagina2() {
+
+if (!planSeleccionado) {
+
+document.getElementById('err_plan').style.display = 'block';
+
+return false;
+
+}
+
+return true;
+
+}
+
+
+
+function validarPagina3() {
+
+let ok = true;
+
+
+
+if (!facturaMode) {
+
+document.getElementById('err_factura').style.display = 'block';
+
+ok = false;
+
+}
+
+
+
+if (facturaMode === 'corp') {
+
+const campos = [
+
+{ id: 'fact_nombre', err: 'err_fact_nombre', check: v => v.trim() !== '' },
+
+{ id: 'fact_cif', err: 'err_fact_cif', check: v => v.trim() !== '' },
+
+{ id: 'fact_email', err: 'err_fact_email', check: v => /\S+@\S+\.\S+/.test(v) },
+
+{ id: 'fact_direccion', err: 'err_fact_direccion', check: v => v.trim() !== '' },
+
+];
+
+campos.forEach(c => {
+
+const el = document.getElementById(c.id);
+
+const err = document.getElementById(c.err);
+
+const valid = c.check(el.value);
+
+el.classList.toggle('error', !valid);
+
+err.style.display = valid ? 'none' : 'block';
+
+if (!valid) ok = false;
+
+});
+
+}
+
+
+
+return ok;
+
+}
+
+
+
+// ── ENVÍO ────────────────────────────────────────────────────
+
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxTr_nJ5aXgRgvx6ndkfG9PWQdmukOiMPf8dydAtItqd9OvFcoA19M9q3BHHCRzcXnL/exec';
+
+
+
+async function enviar() {
+
+if (!validarPagina3()) return;
+
+
+
+const conIva = facturaMode === 'corp';
+
+const setup = conIva ? (planEfectivo.setup * 1.21).toFixed(2) : planEfectivo.setup;
+
+const mensual = conIva ? (planEfectivo.mensual * 1.21).toFixed(2) : planEfectivo.mensual;
+
+
+
+// Objeto plano — una clave por columna en Sheets
+
+const fila = {
+
+fecha: new Date().toLocaleString('es-ES'),
+
+negocio_nombre: document.getElementById('neg_nombre').value.trim(),
+
+negocio_telefono: document.getElementById('neg_telefono').value.trim(),
+
+negocio_email: document.getElementById('neg_email').value.trim(),
+
+negocio_ciudad: document.getElementById('neg_ciudad').value.trim(),
+
+negocio_tipo: document.getElementById('neg_tipo').value,
+
+negocio_gmaps: document.getElementById('neg_gmaps').value.trim(),
+
+negocio_carta: document.getElementById('neg_carta').value.trim(),
+
+plan_nombre: planEfectivo.plan,
+
+plan_tags: planEfectivo.tags,
+
+plan_setup_neto: planEfectivo.setup,
+
+plan_mensual_neto:planEfectivo.mensual,
+
+plan_setup_final: setup,
+
+plan_mensual_final: mensual,
+
+plan_con_iva: conIva ? 'Sí' : 'No',
+
+plan_codigo_lite: codigoAplicado ? 'Sí' : 'No',
+
+fact_modalidad: facturaMode === 'corp' ? 'Corporativa' : 'Promocional',
+
+fact_nombre: facturaMode === 'corp' ? document.getElementById('fact_nombre').value.trim() : '',
+
+fact_cif: facturaMode === 'corp' ? document.getElementById('fact_cif').value.trim() : '',
+
+fact_email: facturaMode === 'corp' ? document.getElementById('fact_email').value.trim() : '',
+
+fact_direccion: facturaMode === 'corp' ? document.getElementById('fact_direccion').value.trim() : '',
+
+};
+
+
+
+// Estado de carga en el botón
+
+const btnSubmit = document.querySelector('.btn-submit');
+
+const textoOriginal = btnSubmit.textContent;
+
+btnSubmit.textContent = 'Enviando…';
+
+btnSubmit.disabled = true;
+
+
+
+try {
+
+// FIX CLAUDE: Se envía como text/plain conteniendo un JSON crudo de manera limpia
+
+await fetch(SHEETS_URL, {
+
+method: 'POST',
+
+headers: { 'Content-Type': 'text/plain' },
+
+body: JSON.stringify(fila)
+
+});
+
+} catch (e) {
+
+console.warn('Error de red al enviar a Sheets:', e);
+
+}
+
+
+
+// Mostrar pantalla de éxito independientemente (el script asíncrono ya habrá procesado la llegada)
+
+const labelPlan = codigoAplicado
+
+? 'MC Lite · 5 MCTags'
+
+: `${planEfectivo.plan} · ${planEfectivo.tags} MCTags`;
+
+
+
+document.getElementById('successPlan').textContent = labelPlan;
+
+document.getElementById('mainCard').style.display = 'none';
+
+document.getElementById('progressWrap').style.display = 'none';
+
+document.getElementById('successScreen').style.display = 'block';
+
+window.scrollTo({ top: 0, behavior: 'smooth' });
+
+
+
+// Restaurar botón
+
+btnSubmit.textContent = textoOriginal;
+
+btnSubmit.disabled = false;
+
+}
+
+
+
+// FIX ADICIONAL: Dejar preseleccionada la tarifa promocional directa al cargar la página
+
+setFactura('promo');
+
 </script>
+
 </body>
-</html>
+
+</html> 
+

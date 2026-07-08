@@ -4,6 +4,13 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>MCsmart · Contratar MCTags</title>
+
+<!-- Open Graph / SEO -->
+<meta property="og:title" content="MCsmart · Contratar MCTags NFC"/>
+<meta property="og:description" content="Rellena el formulario y en menos de 24h te configuramos tus etiquetas NFC."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://formulario-mcsmart.pages.dev"/>
+
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -139,6 +146,7 @@ border: 2px solid var(--border); border-radius: 10px;
 padding: 1rem 1.2rem; cursor: pointer; transition: all 0.2s;
 display: flex; align-items: center; gap: 1rem;
 background: var(--off); position: relative;
+padding-top: 2rem; /* Espacio para el badge */
 }
 .plan-card:hover { border-color: var(--navy); background: white; }
 .plan-card.selected { border-color: var(--navy); background: #eef1f8; }
@@ -163,7 +171,7 @@ content: ''; width: 6px; height: 6px; border-radius: 50%; background: white;
 .plan-mensual span { font-size: 0.7rem; font-weight: 500; color: var(--muted); }
 
 .plan-popular-badge {
-position: absolute; top: 0.5rem; right: 0.7rem;
+position: absolute; top: 0.5rem; left: 0.7rem;
 background: var(--navy); color: white;
 font-size: 0.6rem; font-weight: 700;
 padding: 0.15rem 0.5rem; border-radius: 8px;
@@ -254,6 +262,7 @@ transition: all 0.15s; font-family: inherit;
 flex: 1; padding: 0.85rem; background: var(--navy); color: white;
 border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 700;
 cursor: pointer; transition: background 0.15s; font-family: inherit;
+display: flex; align-items: center; justify-content: center; gap: 0.5rem;
 }
 .btn-next:hover { background: var(--navy-mid); }
 
@@ -261,8 +270,29 @@ cursor: pointer; transition: background 0.15s; font-family: inherit;
 flex: 1; padding: 0.85rem; background: var(--red); color: white;
 border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 700;
 cursor: pointer; transition: background 0.15s; font-family: inherit;
+display: flex; align-items: center; justify-content: center; gap: 0.5rem;
 }
 .btn-submit:hover { background: #c4251c; }
+.btn-submit:disabled { opacity: 0.7; cursor: not-allowed; }
+
+/* Spinner de carga */
+.spinner {
+width: 16px; height: 16px;
+border: 2px solid rgba(255,255,255,0.3);
+border-top-color: white;
+border-radius: 50%;
+animation: spin 0.8s linear infinite;
+display: none;
+}
+.btn-submit.loading .spinner { display: block; }
+.btn-submit.loading .btn-text { display: none; }
+
+@keyframes spin {
+to { transform: rotate(360deg); }
+}
+
+/* Honeypot - invisible para usuarios */
+.hp-field { position: absolute; left: -9999px; opacity: 0; height: 0; overflow: hidden; }
 
 .success-screen { text-align: center; padding: 2.5rem 1rem; display: none; }
 .success-icon {
@@ -277,6 +307,20 @@ margin: 0 auto 1.2rem; border: 2px solid #bbf7d0;
 display: inline-block; background: var(--navy); color: white;
 padding: 0.4rem 1rem; border-radius: 20px;
 font-size: 0.82rem; font-weight: 700; margin: 1rem 0;
+}
+
+/* Error toast */
+.error-toast {
+position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+background: var(--red); color: white; padding: 1rem 1.5rem;
+border-radius: 8px; font-size: 0.88rem; font-weight: 600;
+box-shadow: 0 4px 20px rgba(230,51,41,0.3);
+display: none; z-index: 1000; animation: fadeInUp 0.3s ease;
+}
+.error-toast.show { display: block; }
+@keyframes fadeInUp {
+from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
 .page { display: none; }
@@ -318,6 +362,12 @@ font-size: 0.82rem; font-weight: 700; margin: 1rem 0;
 
 <div class="card" id="mainCard">
 
+<!-- Honeypot anti-spam -->
+<div class="hp-field" aria-hidden="true">
+<label for="hp_website">Website</label>
+<input type="text" id="hp_website" name="website" tabindex="-1" autocomplete="off"/>
+</div>
+
 <div class="page active" id="page1">
 <div class="section-header">
 <div class="section-label">Paso 1 de 3</div>
@@ -325,32 +375,33 @@ font-size: 0.82rem; font-weight: 700; margin: 1rem 0;
 </div>
 
 <div class="form-group">
-<label class="field-label">Nombre del negocio <span class="req">*</span></label>
-<input type="text" id="neg_nombre" placeholder="Ej: Bar El Rincón"/>
+<label class="field-label" for="neg_nombre">Nombre del negocio <span class="req">*</span></label>
+<input type="text" id="neg_nombre" name="nombre_negocio" placeholder="Ej: Bar El Rincón" autocomplete="organization"/>
 <div class="error-msg" id="err_neg_nombre">Este campo es obligatorio</div>
 </div>
 
 <div class="form-row">
 <div class="form-group">
-<label class="field-label">Teléfono / WhatsApp <span class="req">*</span></label>
-<input type="tel" id="neg_telefono" placeholder="+34 6XX XXX XXX"/>
+<label class="field-label" for="neg_telefono">Teléfono / WhatsApp <span class="req">*</span></label>
+<input type="tel" id="neg_telefono" name="telefono" placeholder="+34 6XX XXX XXX" autocomplete="tel"/>
 <div class="error-msg" id="err_neg_telefono">Introduce un teléfono válido</div>
 </div>
 <div class="form-group">
-<label class="field-label">Email <span class="opt">(opcional)</span></label>
-<input type="email" id="neg_email" placeholder="info@tunegocio.com"/>
+<label class="field-label" for="neg_email">Email <span class="opt">(opcional)</span></label>
+<input type="email" id="neg_email" name="email" placeholder="info@tunegocio.com" autocomplete="email"/>
+<div class="error-msg" id="err_neg_email">Introduce un email válido</div>
 </div>
 </div>
 
 <div class="form-row">
 <div class="form-group">
-<label class="field-label">Ciudad <span class="req">*</span></label>
-<input type="text" id="neg_ciudad" placeholder="Ej: Valencia"/>
+<label class="field-label" for="neg_ciudad">Ciudad <span class="req">*</span></label>
+<input type="text" id="neg_ciudad" name="ciudad" placeholder="Ej: Valencia" autocomplete="address-level2"/>
 <div class="error-msg" id="err_neg_ciudad">Introduce la ciudad</div>
 </div>
 <div class="form-group">
-<label class="field-label">Tipo de negocio <span class="opt">(opcional)</span></label>
-<select id="neg_tipo">
+<label class="field-label" for="neg_tipo">Tipo de negocio <span class="opt">(opcional)</span></label>
+<select id="neg_tipo" name="tipo_negocio">
 <option value="">Selecciona...</option>
 <option>Bar / Cafetería</option>
 <option>Restaurante</option>
@@ -366,17 +417,19 @@ font-size: 0.82rem; font-weight: 700; margin: 1rem 0;
 </div>
 
 <div class="form-group">
-<label class="field-label">Enlace a tu ficha de Google Maps <span class="opt">(opcional)</span></label>
-<input type="url" id="neg_gmaps" placeholder="Para configurar las reseñas directas"/>
+<label class="field-label" for="neg_gmaps">Enlace a tu ficha de Google Maps <span class="opt">(opcional)</span></label>
+<input type="url" id="neg_gmaps" name="google_maps" placeholder="https://maps.google.com/..." autocomplete="off"/>
+<div class="error-msg" id="err_neg_gmaps">Introduce una URL válida</div>
 </div>
 
 <div class="form-group">
-<label class="field-label">Enlace a tu Carta Digital o Web <span class="opt">(opcional)</span></label>
-<input type="url" id="neg_carta" placeholder="Para vincular tu menú o web corporativa"/>
+<label class="field-label" for="neg_carta">Enlace a tu Carta Digital o Web <span class="opt">(opcional)</span></label>
+<input type="url" id="neg_carta" name="carta" placeholder="https://tucarta.com/..." autocomplete="off"/>
+<div class="error-msg" id="err_neg_carta">Introduce una URL válida</div>
 </div>
 
 <div class="nav-buttons">
-<button class="btn-next" onclick="irPagina(2)">Siguiente → Elegir plan</button>
+<button class="btn-next" onclick="irPagina(2)"><span class="btn-text">Siguiente → Elegir plan</span></button>
 </div>
 </div>
 
@@ -401,6 +454,7 @@ font-size: 0.82rem; font-weight: 700; margin: 1rem 0;
 </div>
 
 <div class="plan-card" data-plan="MC Extra" data-setup="69" data-mensual="25" data-tags="35" onclick="seleccionarPlan(this)">
+<div class="plan-popular-badge">Más popular</div>
 <div class="plan-radio"></div>
 <div class="plan-info">
 <div class="plan-name">MC Extra</div>
@@ -410,7 +464,6 @@ font-size: 0.82rem; font-weight: 700; margin: 1rem 0;
 <span class="plan-setup">69€ pago inicial</span>
 <span class="plan-mensual">25€ <span>/ mes</span></span>
 </div>
-<div class="plan-popular-badge">Más popular</div>
 </div>
 
 <div class="plan-card" data-plan="MC Pro" data-setup="99" data-mensual="35" data-tags="50" onclick="seleccionarPlan(this)">
@@ -442,7 +495,7 @@ font-size: 0.82rem; font-weight: 700; margin: 1rem 0;
 
 <div class="nav-buttons">
 <button class="btn-back" onclick="irPagina(1)">← Atrás</button>
-<button class="btn-next" onclick="irPagina(3)">Siguiente → Facturación</button>
+<button class="btn-next" onclick="irPagina(3)"><span class="btn-text">Siguiente → Facturación</span></button>
 </div>
 </div>
 
@@ -460,10 +513,10 @@ font-size: 0.82rem; font-weight: 700; margin: 1rem 0;
 </div>
 
 <div class="codigo-wrap">
-<label class="field-label">¿Dispones de un código de asesor autorizado? <span class="opt">(opcional)</span></label>
+<label class="field-label" for="codigoAsesor">¿Dispones de un código de asesor autorizado? <span class="opt">(opcional)</span></label>
 <div class="codigo-input-wrap">
 <span class="codigo-icon">🔑</span>
-<input type="text" id="codigoAsesor" placeholder="Introduce el código si te lo ha facilitado tu asesor" oninput="comprobarCodigo()"/>
+<input type="text" id="codigoAsesor" name="codigo_asesor" placeholder="Introduce el código si te lo ha facilitado tu asesor" oninput="comprobarCodigo()" autocomplete="off"/>
 </div>
 <div class="codigo-success" id="codigoSuccess">¡Código de asesor aplicado! Se ha activado la tarifa exclusiva MC Lite (5 MCTags).</div>
 </div>
@@ -490,34 +543,37 @@ font-size: 0.82rem; font-weight: 700; margin: 1rem 0;
 <div class="factura-section-label">Datos de facturación</div>
 
 <div class="form-group">
-<label class="field-label">Razón social o nombre completo <span class="req">*</span></label>
-<input type="text" id="fact_nombre" placeholder="Ej: Bar El Rincón S.L. / Juan García López"/>
+<label class="field-label" for="fact_nombre">Razón social o nombre completo <span class="req">*</span></label>
+<input type="text" id="fact_nombre" name="razon_social" placeholder="Ej: Bar El Rincón S.L. / Juan García López" autocomplete="organization"/>
 <div class="error-msg" id="err_fact_nombre">Este campo es obligatorio</div>
 </div>
 
 <div class="form-row">
 <div class="form-group">
-<label class="field-label">CIF / NIF <span class="req">*</span></label>
-<input type="text" id="fact_cif" placeholder="Ej: B12345678"/>
-<div class="error-msg" id="err_fact_cif">Introduce el CIF o NIF</div>
+<label class="field-label" for="fact_cif">CIF / NIF <span class="req">*</span></label>
+<input type="text" id="fact_cif" name="cif_nif" placeholder="Ej: B12345678" autocomplete="off" style="text-transform: uppercase;"/>
+<div class="error-msg" id="err_fact_cif">Introduce un CIF/NIF válido (Ej: B12345678)</div>
 </div>
 <div class="form-group">
-<label class="field-label">Email para facturas <span class="req">*</span></label>
-<input type="email" id="fact_email" placeholder="admin@empresa.com"/>
+<label class="field-label" for="fact_email">Email para facturas <span class="req">*</span></label>
+<input type="email" id="fact_email" name="email_facturas" placeholder="admin@empresa.com" autocomplete="email"/>
 <div class="error-msg" id="err_fact_email">Introduce un email válido</div>
 </div>
 </div>
 
 <div class="form-group">
-<label class="field-label">Dirección fiscal <span class="req">*</span></label>
-<input type="text" id="fact_direccion" placeholder="Calle, número, CP, ciudad"/>
+<label class="field-label" for="fact_direccion">Dirección fiscal <span class="req">*</span></label>
+<input type="text" id="fact_direccion" name="direccion_fiscal" placeholder="Calle, número, CP, ciudad" autocomplete="street-address"/>
 <div class="error-msg" id="err_fact_direccion">Introduce la dirección fiscal</div>
 </div>
 </div>
 
 <div class="nav-buttons">
 <button class="btn-back" onclick="irPagina(2)">← Atrás</button>
-<button class="btn-submit" onclick="enviar()">Enviar pedido ✓</button>
+<button class="btn-submit" id="btnSubmit" onclick="enviar()">
+<span class="btn-text">Enviar pedido ✓</span>
+<span class="spinner"></span>
+</button>
 </div>
 </div>
 
@@ -527,18 +583,79 @@ font-size: 0.82rem; font-weight: 700; margin: 1rem 0;
 <div class="success-icon">✓</div>
 <h2>¡Pedido recibido!</h2>
 <div class="success-plan" id="successPlan">—</div>
-<p>En menos de 24h nos ponemos en contacto contigo para confirmar el pedido y coordinar el envío de tus MCTags.</p>
+<p>En menos de 24h nos pondremos en contacto contigo para confirmar el pedido y coordinar el envío de tus MCTags.</p>
 <br/>
 <p style="font-size:0.78rem;">— El equipo de <strong>MCsmart</strong></p>
 </div>
+
+<!-- Toast de error -->
+<div class="error-toast" id="errorToast"></div>
 
 <script>
 let planSeleccionado = null;
 let planEfectivo = null;
 let facturaMode = null;
 let codigoAplicado = false;
+let isSubmitting = false;
 
 const LITE = { plan: 'MC Lite', setup: 29, mensual: 5, tags: 5 };
+
+// Guardar datos en localStorage para recuperación
+const STORAGE_KEY = 'mcsmart_form_draft';
+
+function guardarDraft() {
+  if (!planSeleccionado) return;
+  const data = {
+    neg_nombre: document.getElementById('neg_nombre').value,
+    neg_telefono: document.getElementById('neg_telefono').value,
+    neg_email: document.getElementById('neg_email').value,
+    neg_ciudad: document.getElementById('neg_ciudad').value,
+    neg_tipo: document.getElementById('neg_tipo').value,
+    neg_gmaps: document.getElementById('neg_gmaps').value,
+    neg_carta: document.getElementById('neg_carta').value,
+    plan: planSeleccionado.plan,
+    facturaMode: facturaMode,
+    fact_nombre: document.getElementById('fact_nombre').value,
+    fact_cif: document.getElementById('fact_cif').value,
+    fact_email: document.getElementById('fact_email').value,
+    fact_direccion: document.getElementById('fact_direccion').value,
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function cargarDraft() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (!saved) return;
+  
+  try {
+    const data = JSON.parse(saved);
+    if (data.neg_nombre) document.getElementById('neg_nombre').value = data.neg_nombre;
+    if (data.neg_telefono) document.getElementById('neg_telefono').value = data.neg_telefono;
+    if (data.neg_email) document.getElementById('neg_email').value = data.neg_email;
+    if (data.neg_ciudad) document.getElementById('neg_ciudad').value = data.neg_ciudad;
+    if (data.neg_tipo) document.getElementById('neg_tipo').value = data.neg_tipo;
+    if (data.neg_gmaps) document.getElementById('neg_gmaps').value = data.neg_gmaps;
+    if (data.neg_carta) document.getElementById('neg_carta').value = data.neg_carta;
+    if (data.fact_nombre) document.getElementById('fact_nombre').value = data.fact_nombre;
+    if (data.fact_cif) document.getElementById('fact_cif').value = data.fact_cif;
+    if (data.fact_email) document.getElementById('fact_email').value = data.fact_email;
+    if (data.fact_direccion) document.getElementById('fact_direccion').value = data.fact_direccion;
+    if (data.facturaMode) setFactura(data.facturaMode);
+  } catch (e) {
+    console.warn('Error al cargar draft:', e);
+  }
+}
+
+function limpiarDraft() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('errorToast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 4000);
+}
 
 function irPagina(num) {
   if (num === 2 && !validarPagina1()) return;
@@ -574,6 +691,7 @@ function seleccionarPlan(el) {
   planEfectivo = { ...planSeleccionado };
   codigoAplicado = false;
   document.getElementById('err_plan').style.display = 'none';
+  guardarDraft();
 }
 
 function comprobarCodigo() {
@@ -601,7 +719,7 @@ function actualizarResumen() {
   const mensual = conIva ? (planEfectivo.mensual * 1.21).toFixed(2) : planEfectivo.mensual;
 
   const nombreDisplay = codigoAplicado
-    ? 'MC Lite (Plan descontinuado)'
+    ? 'MC Lite (Plan Restringido)'
     : planEfectivo.plan;
 
   document.getElementById('resumenNombre').textContent = nombreDisplay;
@@ -621,15 +739,51 @@ function setFactura(mode) {
   document.getElementById('err_factura').style.display = 'none';
 
   actualizarResumen();
+  guardarDraft();
+}
+
+// Validadores
+function esEmailValido(email) {
+  if (!email) return true; // Opcional
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function esUrlValida(url) {
+  if (!url) return true; // Opcional
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function esNifCifValido(doc) {
+  if (!doc) return false;
+  const cleaned = doc.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  
+  // NIF (8 dígitos + letra)
+  if (/^[0-9]{8}[A-Z]$/.test(cleaned)) return true;
+  // NIE (X/Y/Z + 7 dígitos + letra)
+  if (/^[XYZ][0-9]{7}[A-Z]$/.test(cleaned)) return true;
+  // CIF (letra + 7 dígitos + letra/dígito)
+  if (/^[ABCDEFGHJKLMNPQS][0-9]{7}[0-9A-J]$/.test(cleaned)) return true;
+  
+  return false;
 }
 
 function validarPagina1() {
   let ok = true;
+  
   const campos = [
-    { id: 'neg_nombre', err: 'err_neg_nombre', check: v => v.trim() !== '' },
-    { id: 'neg_telefono', err: 'err_neg_telefono', check: v => v.trim().length >= 9 },
-    { id: 'neg_ciudad', err: 'err_neg_ciudad', check: v => v.trim() !== '' },
+    { id: 'neg_nombre', err: 'err_neg_nombre', check: v => v.trim() !== '', msg: 'Este campo es obligatorio' },
+    { id: 'neg_telefono', err: 'err_neg_telefono', check: v => v.trim().replace(/\s/g, '').length >= 9, msg: 'Introduce un teléfono válido' },
+    { id: 'neg_ciudad', err: 'err_neg_ciudad', check: v => v.trim() !== '', msg: 'Introduce la ciudad' },
+    { id: 'neg_email', err: 'err_neg_email', check: esEmailValido, msg: 'Introduce un email válido' },
+    { id: 'neg_gmaps', err: 'err_neg_gmaps', check: esUrlValida, msg: 'Introduce una URL válida' },
+    { id: 'neg_carta', err: 'err_neg_carta', check: esUrlValida, msg: 'Introduce una URL válida' },
   ];
+  
   campos.forEach(c => {
     const el = document.getElementById(c.id);
     const err = document.getElementById(c.err);
@@ -638,6 +792,8 @@ function validarPagina1() {
     err.style.display = valid ? 'none' : 'block';
     if (!valid) ok = false;
   });
+  
+  if (ok) guardarDraft();
   return ok;
 }
 
@@ -646,6 +802,7 @@ function validarPagina2() {
     document.getElementById('err_plan').style.display = 'block';
     return false;
   }
+  guardarDraft();
   return true;
 }
 
@@ -660,10 +817,11 @@ function validarPagina3() {
   if (facturaMode === 'corp') {
     const campos = [
       { id: 'fact_nombre', err: 'err_fact_nombre', check: v => v.trim() !== '' },
-      { id: 'fact_cif', err: 'err_fact_cif', check: v => v.trim() !== '' },
-      { id: 'fact_email', err: 'err_fact_email', check: v => /\S+@\S+\.\S+/.test(v) },
+      { id: 'fact_cif', err: 'err_fact_cif', check: esNifCifValido, msg: 'Introduce un CIF/NIF válido' },
+      { id: 'fact_email', err: 'err_fact_email', check: esEmailValido },
       { id: 'fact_direccion', err: 'err_fact_direccion', check: v => v.trim() !== '' },
     ];
+    
     campos.forEach(c => {
       const el = document.getElementById(c.id);
       const err = document.getElementById(c.err);
@@ -677,21 +835,28 @@ function validarPagina3() {
   return ok;
 }
 
-// ============================================
-// CONFIGURACIÓN WHATSAPP (CallMeBot)
-// ============================================
-const WHATSAPP_NUMERO = '34667705084';
-const WHATSAPP_APIKEY = '3027963';
-
 async function enviar() {
+  // Prevenir doble envío
+  if (isSubmitting) return;
   if (!validarPagina3()) return;
+
+  // Honeypot check
+  if (document.getElementById('hp_website').value) {
+    console.log('Bot detectado');
+    return;
+  }
+
+  isSubmitting = true;
+  const btnSubmit = document.getElementById('btnSubmit');
+  const textoOriginal = btnSubmit.querySelector('.btn-text').textContent;
+  btnSubmit.classList.add('loading');
+  btnSubmit.disabled = true;
 
   const conIva = facturaMode === 'corp';
   const setup = conIva ? (planEfectivo.setup * 1.21).toFixed(2) : planEfectivo.setup;
   const mensual = conIva ? (planEfectivo.mensual * 1.21).toFixed(2) : planEfectivo.mensual;
 
-  const fila = {
-    fecha: new Date().toLocaleString('es-ES'),
+  const payload = {
     negocio_nombre: document.getElementById('neg_nombre').value.trim(),
     negocio_telefono: document.getElementById('neg_telefono').value.trim(),
     negocio_email: document.getElementById('neg_email').value.trim(),
@@ -701,12 +866,9 @@ async function enviar() {
     negocio_carta: document.getElementById('neg_carta').value.trim(),
     plan_nombre: planEfectivo.plan,
     plan_tags: planEfectivo.tags,
-    plan_setup_neto: planEfectivo.setup,
-    plan_mensual_neto: planEfectivo.mensual,
-    plan_setup_final: setup,
-    plan_mensual_final: mensual,
-    plan_con_iva: conIva ? 'Sí' : 'No',
-    plan_codigo_lite: codigoAplicado ? 'Sí' : 'No',
+    plan_setup: setup,
+    plan_mensual: mensual,
+    codigo_lite: codigoAplicado,
     fact_modalidad: facturaMode === 'corp' ? 'Corporativa' : 'Promocional',
     fact_nombre: facturaMode === 'corp' ? document.getElementById('fact_nombre').value.trim() : '',
     fact_cif: facturaMode === 'corp' ? document.getElementById('fact_cif').value.trim() : '',
@@ -714,57 +876,53 @@ async function enviar() {
     fact_direccion: facturaMode === 'corp' ? document.getElementById('fact_direccion').value.trim() : '',
   };
 
-  const btnSubmit = document.querySelector('.btn-submit');
-  const textoOriginal = btnSubmit.textContent;
-  btnSubmit.textContent = 'Enviando…';
-  btnSubmit.disabled = true;
-
-  // Construir mensaje de WhatsApp con todos los datos
-  const labelPlanTxt = codigoAplicado ? 'MC Lite (Descontinuado)' : planEfectivo.plan;
-
-  let mensajeWA = `🆕 NUEVO PEDIDO MCsmart\n\n`;
-  mensajeWA += `🏪 Negocio: ${fila.negocio_nombre}\n`;
-  mensajeWA += `📞 Teléfono: ${fila.negocio_telefono}\n`;
-  mensajeWA += `📍 Ciudad: ${fila.negocio_ciudad}\n`;
-  mensajeWA += `🏷️ Tipo: ${fila.negocio_tipo || '-'}\n`;
-  mensajeWA += `📧 Email: ${fila.negocio_email || '-'}\n`;
-  mensajeWA += `🗺️ Maps: ${fila.negocio_gmaps || '-'}\n`;
-  mensajeWA += `📋 Carta: ${fila.negocio_carta || '-'}\n\n`;
-  mensajeWA += `💼 Plan: ${labelPlanTxt}\n`;
-  mensajeWA += `   Setup: ${setup}€ | Mensual: ${mensual}€ | Tags: ${planEfectivo.tags}\n\n`;
-  mensajeWA += `💳 Modalidad: ${fila.fact_modalidad}\n`;
-
-  if (facturaMode === 'corp') {
-    mensajeWA += `\n📄 DATOS DE FACTURACIÓN:\n`;
-    mensajeWA += `   Razón social: ${fila.fact_nombre}\n`;
-    mensajeWA += `   NIF/CIF: ${fila.fact_cif}\n`;
-    mensajeWA += `   Email facturas: ${fila.fact_email}\n`;
-    mensajeWA += `   Dirección fiscal: ${fila.fact_direccion}\n`;
-  }
-
-  const urlWhatsapp = `https://api.callmebot.com/whatsapp.php?phone=${WHATSAPP_NUMERO}&text=${encodeURIComponent(mensajeWA)}&apikey=${WHATSAPP_APIKEY}`;
-
   try {
-    await fetch(urlWhatsapp);
-  } catch (e) {
-    console.warn('Error al enviar WhatsApp:', e);
+    const response = await fetch('/api/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error('Error en la respuesta');
+    }
+
+    const result = await response.json();
+
+    // Éxito
+    limpiarDraft();
+    
+    const labelPlan = codigoAplicado
+      ? 'MC Lite · 5 MCTags'
+      : `${planEfectivo.plan} · ${planEfectivo.tags} MCTags`;
+
+    document.getElementById('successPlan').textContent = labelPlan;
+    document.getElementById('mainCard').style.display = 'none';
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('successScreen').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  } catch (error) {
+    console.error('Error:', error);
+    showToast('❌ Error al enviar. Por favor, inténtalo de nuevo.');
+  } finally {
+    isSubmitting = false;
+    btnSubmit.classList.remove('loading');
+    btnSubmit.disabled = false;
+    btnSubmit.querySelector('.btn-text').textContent = textoOriginal;
   }
-
-  const labelPlan = codigoAplicado
-    ? 'MC Lite · 5 MCTags'
-    : `${planEfectivo.plan} · ${planEfectivo.tags} MCTags`;
-
-  document.getElementById('successPlan').textContent = labelPlan;
-  document.getElementById('mainCard').style.display = 'none';
-  document.getElementById('progressWrap').style.display = 'none';
-  document.getElementById('successScreen').style.display = 'block';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  btnSubmit.textContent = textoOriginal;
-  btnSubmit.disabled = false;
 }
 
+// Inicialización
 setFactura('promo');
+cargarDraft();
+
+// Auto-guardar al escribir
+document.querySelectorAll('input, select').forEach(el => {
+  el.addEventListener('input', () => {
+    if (planSeleccionado) guardarDraft();
+  });
+});
 </script>
 </body>
 </html>

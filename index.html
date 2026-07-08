@@ -601,7 +601,7 @@ function actualizarResumen() {
   const mensual = conIva ? (planEfectivo.mensual * 1.21).toFixed(2) : planEfectivo.mensual;
 
   const nombreDisplay = codigoAplicado
-    ? 'MC Lite (Plan Restringido)'
+    ? 'MC Lite (Plan descontinuado)'
     : planEfectivo.plan;
 
   document.getElementById('resumenNombre').textContent = nombreDisplay;
@@ -720,7 +720,7 @@ async function enviar() {
   btnSubmit.disabled = true;
 
   // Construir mensaje de WhatsApp con todos los datos
-  const labelPlanTxt = codigoAplicado ? 'MC Lite (Restringido)' : planEfectivo.plan;
+  const labelPlanTxt = codigoAplicado ? 'MC Lite (Descontinuado)' : planEfectivo.plan;
 
   let mensajeWA = `🆕 NUEVO PEDIDO MCsmart\n\n`;
   mensajeWA += `🏪 Negocio: ${fila.negocio_nombre}\n`;

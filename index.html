@@ -707,8 +707,8 @@
     return ok;
   }
 
-  // ── ENVÍO ────────────────────────────────────────────────────
-  const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxVygnW6CVaAiKCVc6Tjp-u351F-ncT07VdpguuHALAJX3jA3BAq1zo914732i2o_IY/exec';
+  // ── ENVÍO DEFINITIVO ADAPTADO A GOOGLE PARAMETERS ────────────
+  const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxTr_nJ5aXgRgvx6ndkfG9PWQdmukOiMPf8dydAtItqd9OvFcoA19M9q3BHHCRzcXnL/exec';
 
   async function enviar() {
     if (!validarPagina3()) return;
@@ -717,30 +717,28 @@
     const setup   = conIva ? (planEfectivo.setup   * 1.21).toFixed(2) : planEfectivo.setup;
     const mensual = conIva ? (planEfectivo.mensual * 1.21).toFixed(2) : planEfectivo.mensual;
 
-    // Objeto plano — una clave por columna en Sheets
-    const fila = {
-      fecha:            new Date().toLocaleString('es-ES'),
-      negocio_nombre:   document.getElementById('neg_nombre').value.trim(),
-      negocio_telefono: document.getElementById('neg_telefono').value.trim(),
-      negocio_email:    document.getElementById('neg_email').value.trim(),
-      negocio_ciudad:   document.getElementById('neg_ciudad').value.trim(),
-      negocio_tipo:     document.getElementById('neg_tipo').value,
-      negocio_gmaps:    document.getElementById('neg_gmaps').value.trim(),
-      negocio_carta:    document.getElementById('neg_carta').value.trim(),
-      plan_nombre:      planEfectivo.plan,
-      plan_tags:        planEfectivo.tags,
-      plan_setup_neto:  planEfectivo.setup,
-      plan_mensual_neto:planEfectivo.mensual,
-      plan_setup_final: setup,
-      plan_mensual_final: mensual,
-      plan_con_iva:     conIva ? 'Sí' : 'No',
-      plan_codigo_lite: codigoAplicado ? 'Sí' : 'No',
-      fact_modalidad:   facturaMode === 'corp' ? 'Corporativa' : 'Promocional',
-      fact_nombre:      facturaMode === 'corp' ? document.getElementById('fact_nombre').value.trim() : '',
-      fact_cif:         facturaMode === 'corp' ? document.getElementById('fact_cif').value.trim() : '',
-      fact_email:       facturaMode === 'corp' ? document.getElementById('fact_email').value.trim() : '',
-      fact_direccion:   facturaMode === 'corp' ? document.getElementById('fact_direccion').value.trim() : '',
-    };
+    // Estructuramos los datos usando URLSearchParams para asegurar compatibilidad total con e.parameter
+    const formData = new URLSearchParams();
+    formData.append('negocio_nombre', document.getElementById('neg_nombre').value.trim());
+    formData.append('negocio_telefono', document.getElementById('neg_telefono').value.trim());
+    formData.append('negocio_email', document.getElementById('neg_email').value.trim());
+    formData.append('negocio_ciudad', document.getElementById('neg_ciudad').value.trim());
+    formData.append('negocio_tipo', document.getElementById('neg_tipo').value);
+    formData.append('negocio_gmaps', document.getElementById('neg_gmaps').value.trim());
+    formData.append('negocio_carta', document.getElementById('neg_carta').value.trim());
+    formData.append('plan_nombre', planEfectivo.plan);
+    formData.append('plan_tags', planEfectivo.tags);
+    formData.append('plan_setup_neto', planEfectivo.setup);
+    formData.append('plan_mensual_neto', planEfectivo.mensual);
+    formData.append('plan_setup_final', setup);
+    formData.append('plan_mensual_final', mensual);
+    formData.append('plan_con_iva', conIva ? 'Sí' : 'No');
+    formData.append('plan_codigo_lite', codigoAplicado ? 'Sí' : 'No');
+    formData.append('fact_modalidad', facturaMode === 'corp' ? 'Corporativa' : 'Promocional');
+    formData.append('fact_nombre', facturaMode === 'corp' ? document.getElementById('fact_nombre').value.trim() : '');
+    formData.append('fact_cif', facturaMode === 'corp' ? document.getElementById('fact_cif').value.trim() : '');
+    formData.append('fact_email', facturaMode === 'corp' ? document.getElementById('fact_email').value.trim() : '');
+    formData.append('fact_direccion', facturaMode === 'corp' ? document.getElementById('fact_direccion').value.trim() : '');
 
     // Estado de carga en el botón
     const btnSubmit = document.querySelector('.btn-submit');
@@ -749,20 +747,17 @@
     btnSubmit.disabled = true;
 
     try {
-      // Apps Script no acepta JSON con fetch POST por CORS,
-      // se usa no-cors con URLSearchParams para que llegue como form data
+      // El navegador enviará esto de forma limpia saltando las restricciones restrictivas de CORS de Sheets
       await fetch(SHEETS_URL, {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ data: JSON.stringify(fila) }).toString(),
+        body: formData
       });
     } catch (e) {
-      // no-cors no devuelve error real; si llega aquí es un fallo de red
-      console.warn('Error de red al enviar a Sheets:', e);
+      console.warn('Error controlado de red:', e);
     }
 
-    // Mostrar pantalla de éxito independientemente (no-cors no devuelve respuesta)
+    // Mostrar pantalla de éxito
     const labelPlan = codigoAplicado
       ? 'MC Lite · 5 MCTags'
       : `${planEfectivo.plan} · ${planEfectivo.tags} MCTags`;
@@ -773,10 +768,13 @@
     document.getElementById('successScreen').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Restaurar botón por si el usuario vuelve atrás (poco probable pero seguro)
+    // Restaurar botón
     btnSubmit.textContent = textoOriginal;
     btnSubmit.disabled = false;
   }
+
+  // Dejar preseleccionada la tarifa promocional directa al cargar la página
+  setFactura('promo');
 </script>
 </body>
 </html>

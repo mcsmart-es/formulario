@@ -459,12 +459,12 @@ input.error, select.error { border-color: var(--red); box-shadow: 0 0 0 3px rgba
 
     <div class="factura-toggle">
       <button class="toggle-btn" id="btnPromo" onclick="setFactura('promo')">
-        <span class="icon">👌</span><span class="lbl">Tarifa Promocional Directa</span>
-        <span class="sub">Pago rápido (Bizum/Efectivo). Ahorra el recargo administrativo.</span>
+        <span class="icon">👌</span><span class="lbl">Tarifa Simple</span>
+        <span class="sub">Pago rápido simplificado.</span>
       </button>
       <button class="toggle-btn" id="btnCorp" onclick="setFactura('corp')">
-        <span class="icon">🧾</span><span class="lbl">Tarifa Corporativa (+21%)</span>
-        <span class="sub">Requiere Factura Completa y procesamiento de datos fiscales (CIF).</span>
+        <span class="icon">🧾</span><span class="lbl">Tarifa Corporativa</span>
+        <span class="sub">Requiere procesamiento de datos fiscales (CIF/NIF). Incluye tramitación administrativa y certificación de uso comercial para empresas y autónomos.</span>
       </button>
     </div>
     <div class="error-msg" id="err_factura" style="margin-top:-0.5rem; margin-bottom:1rem;">Selecciona una modalidad de pago</div>
@@ -801,7 +801,7 @@ async function enviar() {
   msg += `   Código lite: ${codigoAplicado ? 'Sí (javi29)' : 'No'}\n`;
 
   msg += `\n━━━━ PAGO ━━━━\n`;
-  msg += `💳 Modalidad: ${facturaMode === 'corp' ? 'Corporativa (+21% IVA)' : 'Promocional directa'}\n`;
+  msg += `💳 Modalidad: ${facturaMode === 'corp' ? 'Corporativa' : 'Simple'}\n`;
 
   if (facturaMode === 'corp') {
     msg += `\n━━━━ FACTURACIÓN ━━━━\n`;

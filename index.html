@@ -4,925 +4,828 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>MCsmart · Contratar MCTags</title>
-
-<!-- Open Graph / SEO -->
-<meta property="og:title" content="MCsmart · Contratar MCTags NFC"/>
-<meta property="og:description" content="Rellena el formulario y en menos de 24h te configuramos tus etiquetas NFC."/>
-<meta property="og:type" content="website"/>
-<meta property="og:url" content="https://formulario-mcsmart.pages.dev"/>
-
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
---navy: #1B2A4A;
---navy-mid: #243660;
---red: #E63329;
---white: #FFFFFF;
---off: #f6f7fb;
---border: #dde3ef;
---muted: #8a93a8;
---text: #1a1f2e;
---green: #16a34a;
---green-light: #f0fdf4;
+  --navy: #1B2A4A;
+  --navy-mid: #243660;
+  --red: #E63329;
+  --white: #FFFFFF;
+  --off: #f6f7fb;
+  --border: #dde3ef;
+  --muted: #8a93a8;
+  --text: #1a1f2e;
+  --green: #16a34a;
+  --green-light: #f0fdf4;
 }
 
 body {
-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-background: var(--off);
-color: var(--text);
-min-height: 100vh;
-padding: 2rem 1rem 4rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--off);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 2rem 1rem 4rem;
 }
 
+/* === HEADER === */
 .header { text-align: center; margin-bottom: 2.5rem; }
 
-.logo-mark {
-display: inline-block;
-background: var(--navy);
-color: white;
-font-size: 0.9rem;
-font-weight: 800;
-padding: 0.3rem 0.7rem;
-border-radius: 4px;
-letter-spacing: 0.05rem;
-margin-bottom: 1.2rem;
+.header-logo {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0; margin-bottom: 1.2rem;
 }
-.logo-mark span { color: var(--red); }
+
+.logo-img {
+  width: 110px; height: 110px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(27,42,74,0.10));
+}
 
 .header h1 {
-font-size: clamp(1.4rem, 4vw, 2rem);
-font-weight: 700;
-color: var(--navy);
-margin-bottom: 0.5rem;
+  font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 700;
+  color: var(--navy); margin-bottom: 0.5rem;
 }
-
 .header p {
-color: var(--muted);
-font-size: 0.88rem;
-max-width: 420px;
-margin: 0 auto;
-line-height: 1.6;
+  color: var(--muted); font-size: 0.88rem;
+  max-width: 420px; margin: 0 auto; line-height: 1.6;
 }
 
+/* === PROGRESS === */
 .progress-wrap { max-width: 580px; margin: 0 auto 2rem; }
 .progress-steps { display: flex; align-items: center; justify-content: center; }
-
 .step { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; flex: 1; }
-
 .step-dot {
-width: 28px; height: 28px; border-radius: 50%;
-background: var(--border);
-display: flex; align-items: center; justify-content: center;
-font-size: 0.7rem; font-weight: 700; color: var(--muted);
-transition: all 0.3s; position: relative; z-index: 1;
+  width: 28px; height: 28px; border-radius: 50%; background: var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 700; color: var(--muted);
+  transition: all 0.3s; position: relative; z-index: 1;
 }
 .step.active .step-dot { background: var(--navy); color: white; }
 .step.done .step-dot { background: var(--green); color: white; }
-
 .step-label { font-size: 0.65rem; color: var(--muted); font-weight: 500; text-align: center; white-space: nowrap; }
 .step.active .step-label { color: var(--navy); font-weight: 700; }
 .step.done .step-label { color: var(--green); }
-
 .step-line { flex: 1; height: 2px; background: var(--border); margin-top: -14px; transition: background 0.3s; }
 .step-line.done { background: var(--green); }
 
+/* === CARD === */
 .card {
-background: white; border: 1px solid var(--border); border-radius: 12px;
-padding: 2rem; max-width: 580px; margin: 0 auto;
-box-shadow: 0 2px 16px rgba(27,42,74,0.06);
+  background: white; border: 1px solid var(--border); border-radius: 12px;
+  padding: 2rem; max-width: 580px; margin: 0 auto;
+  box-shadow: 0 2px 16px rgba(27,42,74,0.06);
 }
 
 .section-header { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
-
-.section-label {
-font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15rem;
-text-transform: uppercase; color: var(--red); margin-bottom: 0.3rem;
-}
+.section-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15rem; text-transform: uppercase; color: var(--red); margin-bottom: 0.3rem; }
 .section-title { font-size: 1.1rem; font-weight: 700; color: var(--navy); }
 
 .form-group { margin-bottom: 1.1rem; }
-
-label.field-label {
-display: block; font-size: 0.78rem; font-weight: 600;
-color: var(--navy); margin-bottom: 0.35rem;
-}
-
+label.field-label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--navy); margin-bottom: 0.35rem; }
 .req { color: var(--red); }
 .opt { color: var(--muted); font-weight: 400; font-size: 0.72rem; }
 
-input[type="text"],
-input[type="email"],
-input[type="tel"],
-input[type="url"],
-select {
-width: 100%; padding: 0.65rem 0.85rem;
-border: 1.5px solid var(--border); border-radius: 8px;
-font-size: 0.88rem; font-family: inherit; color: var(--text);
-background: var(--off);
-transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
-outline: none; -webkit-appearance: none;
+input[type="text"], input[type="email"], input[type="tel"], input[type="url"], select {
+  width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid var(--border); border-radius: 8px;
+  font-size: 0.88rem; font-family: inherit; color: var(--text); background: var(--off);
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s; outline: none; -webkit-appearance: none;
 }
-
-input:focus, select:focus {
-border-color: var(--navy); background: white;
-box-shadow: 0 0 0 3px rgba(27,42,74,0.08);
-}
-
-input.error, select.error {
-border-color: var(--red);
-box-shadow: 0 0 0 3px rgba(230,51,41,0.08);
-}
-
+input:focus, select:focus { border-color: var(--navy); background: white; box-shadow: 0 0 0 3px rgba(27,42,74,0.08); }
+input.error, select.error { border-color: var(--red); box-shadow: 0 0 0 3px rgba(230,51,41,0.08); }
 .error-msg { font-size: 0.72rem; color: var(--red); margin-top: 0.3rem; display: none; }
 .hint { font-size: 0.72rem; color: var(--muted); margin-top: 0.3rem; line-height: 1.4; }
 
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
-.planes-grid { display: flex; flex-direction: column; gap: 0.6rem; }
+/* === NEGOCIO INFO BOX === */
+.negocio-group {
+  background: var(--off); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1rem 1.1rem; margin-bottom: 1.1rem;
+}
+.negocio-group-label {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1rem;
+  text-transform: uppercase; color: var(--navy); margin-bottom: 0.8rem;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.negocio-group-label::before { content: '🏪'; font-size: 0.9rem; }
 
+/* === PHONE SELECTOR === */
+.phone-input-wrap { display: flex; gap: 0.5rem; align-items: flex-start; }
+.country-selector { position: relative; width: 110px; flex-shrink: 0; }
+.country-selected {
+  display: flex; align-items: center; gap: 0.3rem; padding: 0.65rem 0.5rem;
+  border: 1.5px solid var(--border); border-radius: 8px; background: var(--off);
+  cursor: pointer; user-select: none; transition: all 0.15s; height: 38px;
+}
+.country-selected:hover { border-color: var(--navy); }
+.country-selected .flag { font-size: 1.1rem; }
+.country-selected .code { font-size: 0.85rem; font-weight: 600; color: var(--text); flex: 1; }
+.country-selected .arrow { font-size: 0.7rem; color: var(--muted); }
+.country-dropdown {
+  position: absolute; top: calc(100% + 4px); left: 0; width: 220px;
+  background: white; border: 1px solid var(--border); border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12); z-index: 10; display: none;
+}
+.country-dropdown.open { display: block; }
+.country-search {
+  width: 100%; padding: 0.5rem 0.7rem; border: none; border-bottom: 1px solid var(--border);
+  font-size: 0.82rem; outline: none; border-radius: 8px 8px 0 0;
+}
+.country-list { max-height: 180px; overflow-y: auto; }
+.country-item {
+  display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.7rem;
+  cursor: pointer; font-size: 0.82rem; transition: background 0.1s;
+}
+.country-item:hover { background: var(--off); }
+.country-item .flag { font-size: 1rem; }
+.country-item .name { flex: 1; color: var(--text); }
+.country-item .code-label { color: var(--muted); font-weight: 500; font-size: 0.78rem; }
+.phone-number-input { flex: 1; }
+
+/* === PLANES === */
+.planes-grid { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 0.5rem; }
 .plan-card {
-border: 2px solid var(--border); border-radius: 10px;
-padding: 1rem 1.2rem; cursor: pointer; transition: all 0.2s;
-display: flex; align-items: center; gap: 1rem;
-background: var(--off); position: relative;
-padding-top: 2rem; /* Espacio para el badge */
+  border: 2px solid var(--border); border-radius: 10px; padding: 1rem 1.2rem;
+  cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 1rem;
+  background: var(--off); position: relative; overflow: visible;
 }
 .plan-card:hover { border-color: var(--navy); background: white; }
 .plan-card.selected { border-color: var(--navy); background: #eef1f8; }
-
 .plan-radio {
-width: 18px; height: 18px; border-radius: 50%;
-border: 2px solid var(--border); flex-shrink: 0;
-transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border);
+  flex-shrink: 0; transition: all 0.2s; display: flex; align-items: center; justify-content: center;
 }
 .plan-card.selected .plan-radio { border-color: var(--navy); background: var(--navy); }
-.plan-card.selected .plan-radio::after {
-content: ''; width: 6px; height: 6px; border-radius: 50%; background: white;
-}
-
+.plan-card.selected .plan-radio::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: white; }
 .plan-info { flex: 1; }
 .plan-name { font-size: 0.9rem; font-weight: 700; color: var(--navy); margin-bottom: 0.1rem; }
 .plan-tags-count { font-size: 0.72rem; color: var(--muted); font-weight: 500; }
-
 .plan-precio { text-align: right; flex-shrink: 0; }
 .plan-setup { font-size: 0.78rem; color: var(--muted); display: block; }
 .plan-mensual { font-size: 1rem; font-weight: 800; color: var(--navy); display: block; }
 .plan-mensual span { font-size: 0.7rem; font-weight: 500; color: var(--muted); }
-
 .plan-popular-badge {
-position: absolute; top: 0.5rem; left: 0.7rem;
-background: var(--navy); color: white;
-font-size: 0.6rem; font-weight: 700;
-padding: 0.15rem 0.5rem; border-radius: 8px;
-text-transform: uppercase; letter-spacing: 0.05rem;
+  position: absolute; top: -10px; right: 12px;
+  background: var(--navy); color: white; font-size: 0.6rem; font-weight: 700;
+  padding: 0.2rem 0.6rem; border-radius: 8px; text-transform: uppercase;
+  letter-spacing: 0.05rem; z-index: 2; box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
-.resumen-box {
-background: var(--off); border: 1px solid var(--border);
-border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 1rem;
-}
-.resumen-label {
-font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12rem;
-text-transform: uppercase; color: var(--muted); margin-bottom: 0.6rem;
-}
+/* === RESUMEN === */
+.resumen-box { background: var(--off); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+.resumen-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12rem; text-transform: uppercase; color: var(--muted); margin-bottom: 0.6rem; }
 .resumen-plan { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.2rem; }
 .resumen-precios { font-size: 0.82rem; color: var(--muted); }
 .resumen-precios strong { color: var(--navy); }
 .iva-note { font-size: 0.72rem; color: var(--muted); margin-top: 0.3rem; font-style: italic; display: none; }
 
+/* === CODIGO === */
 .codigo-wrap { margin-bottom: 1.2rem; }
 .codigo-input-wrap { position: relative; }
-.codigo-input-wrap input {
-padding-left: 2.4rem;
-border-style: dashed;
-}
-.codigo-icon {
-position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%);
-font-size: 1rem; pointer-events: none;
-}
-.codigo-success {
-font-size: 0.78rem; color: var(--green); font-weight: 600;
-margin-top: 0.4rem; display: none;
-padding: 0.4rem 0.7rem; background: var(--green-light);
-border-radius: 6px; border: 1px solid #bbf7d0;
-}
+.codigo-input-wrap input { padding-left: 2.4rem; border-style: dashed; }
+.codigo-icon { position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%); font-size: 1rem; pointer-events: none; }
+.codigo-success { font-size: 0.78rem; color: var(--green); font-weight: 600; margin-top: 0.4rem; display: none; padding: 0.4rem 0.7rem; background: var(--green-light); border-radius: 6px; border: 1px solid #bbf7d0; }
 
+/* === FACTURA === */
 .factura-label-row { margin-bottom: 0.6rem; }
 .factura-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1rem; }
-
 .toggle-btn {
-padding: 0.9rem 0.7rem; border: 2px solid var(--border);
-border-radius: 10px; background: var(--off);
-cursor: pointer; text-align: center;
-transition: all 0.2s; font-family: inherit;
+  padding: 0.9rem 0.7rem; border: 2px solid var(--border); border-radius: 10px; background: var(--off);
+  cursor: pointer; text-align: center; transition: all 0.2s; font-family: inherit;
 }
 .toggle-btn .icon { font-size: 1.3rem; display: block; margin-bottom: 0.3rem; }
 .toggle-btn .lbl { font-size: 0.8rem; font-weight: 700; color: var(--text); display: block; line-height: 1.2; }
 .toggle-btn .sub { font-size: 0.68rem; color: var(--muted); display: block; margin-top: 0.3rem; line-height: 1.3; }
 .toggle-btn:hover { border-color: var(--navy); background: white; }
-
 .toggle-btn.selected-promo { border-color: var(--green); background: var(--green-light); }
 .toggle-btn.selected-promo .lbl { color: var(--green); }
-
 .toggle-btn.selected-corp { border-color: var(--navy); background: #eef1f8; }
 .toggle-btn.selected-corp .lbl { color: var(--navy); }
 
-.factura-fields {
-background: var(--off); border: 1px solid var(--border);
-border-radius: 10px; padding: 1.2rem;
-display: none; animation: slideDown 0.25s ease;
-}
+.factura-fields { background: var(--off); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem; display: none; animation: slideDown 0.25s ease; }
 .factura-fields.show { display: block; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.factura-section-label { font-size: 0.72rem; font-weight: 700; color: var(--navy); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.08rem; }
 
-@keyframes slideDown {
-from { opacity: 0; transform: translateY(-8px); }
-to { opacity: 1; transform: translateY(0); }
+/* === FILE UPLOAD === */
+.file-upload-wrap { margin-top: 0.5rem; }
+.btn-file {
+  display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.9rem;
+  background: white; border: 1.5px dashed var(--border); border-radius: 8px;
+  font-size: 0.82rem; font-weight: 600; color: var(--navy); cursor: pointer;
+  transition: all 0.15s; font-family: inherit;
 }
-
-.factura-section-label {
-font-size: 0.72rem; font-weight: 700; color: var(--navy);
-margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.08rem;
+.btn-file:hover { border-color: var(--navy); background: var(--off); }
+.btn-file:disabled { opacity: 0.5; cursor: not-allowed; }
+.file-list { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.6rem; }
+.file-tag {
+  display: flex; align-items: center; gap: 0.5rem; padding: 0.45rem 0.7rem;
+  background: #eef1f8; border: 1px solid var(--border); border-radius: 6px;
+  font-size: 0.76rem; color: var(--navy); font-weight: 500;
 }
-
-.nav-buttons {
-display: flex; gap: 0.8rem; margin-top: 1.5rem;
-padding-top: 1.2rem; border-top: 1px solid var(--border);
-}
-
-.btn-back {
-padding: 0.75rem 1.2rem; border: 1.5px solid var(--border);
-border-radius: 8px; background: none; color: var(--muted);
-font-size: 0.85rem; font-weight: 600; cursor: pointer;
-transition: all 0.15s; font-family: inherit;
-}
-.btn-back:hover { border-color: var(--navy); color: var(--navy); }
-
-.btn-next {
-flex: 1; padding: 0.85rem; background: var(--navy); color: white;
-border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 700;
-cursor: pointer; transition: background 0.15s; font-family: inherit;
-display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-}
-.btn-next:hover { background: var(--navy-mid); }
-
-.btn-submit {
-flex: 1; padding: 0.85rem; background: var(--red); color: white;
-border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 700;
-cursor: pointer; transition: background 0.15s; font-family: inherit;
-display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-}
-.btn-submit:hover { background: #c4251c; }
-.btn-submit:disabled { opacity: 0.7; cursor: not-allowed; }
-
-/* Spinner de carga */
+.file-tag .file-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-tag.uploading { background: #fff7ed; border-color: #fed7aa; }
+.file-tag.uploading .status { color: #ea580c; }
+.file-tag.done { background: var(--green-light); border-color: #bbf7d0; }
+.file-tag.done .status { color: var(--green); }
+.file-tag.error-file { background: #fef2f2; border-color: #fecaca; }
+.file-tag.error-file .status { color: var(--red); }
+.file-tag .status { font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
+.file-tag .remove { cursor: pointer; color: var(--red); font-weight: 700; flex-shrink: 0; padding: 0 0.2rem; }
 .spinner {
-width: 16px; height: 16px;
-border: 2px solid rgba(255,255,255,0.3);
-border-top-color: white;
-border-radius: 50%;
-animation: spin 0.8s linear infinite;
-display: none;
+  display: inline-block; width: 10px; height: 10px; border: 2px solid #fed7aa;
+  border-top-color: #ea580c; border-radius: 50%; animation: spin 0.6s linear infinite;
 }
-.btn-submit.loading .spinner { display: block; }
-.btn-submit.loading .btn-text { display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-@keyframes spin {
-to { transform: rotate(360deg); }
-}
+/* === BOTONES NAV === */
+.nav-buttons { display: flex; gap: 0.8rem; margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid var(--border); }
+.btn-back { padding: 0.75rem 1.2rem; border: 1.5px solid var(--border); border-radius: 8px; background: none; color: var(--muted); font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+.btn-back:hover { border-color: var(--navy); color: var(--navy); }
+.btn-next { flex: 1; padding: 0.85rem; background: var(--navy); color: white; border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 700; cursor: pointer; transition: background 0.15s; font-family: inherit; }
+.btn-next:hover { background: var(--navy-mid); }
+.btn-submit { flex: 1; padding: 0.85rem; background: var(--red); color: white; border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 700; cursor: pointer; transition: background 0.15s; font-family: inherit; }
+.btn-submit:hover { background: #c4251c; }
+.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
-/* Honeypot - invisible para usuarios */
-.hp-field { position: absolute; left: -9999px; opacity: 0; height: 0; overflow: hidden; }
-
+/* === SUCCESS === */
 .success-screen { text-align: center; padding: 2.5rem 1rem; display: none; }
-.success-icon {
-width: 70px; height: 70px; background: var(--green-light);
-border-radius: 50%; display: flex; align-items: center;
-justify-content: center; font-size: 2rem;
-margin: 0 auto 1.2rem; border: 2px solid #bbf7d0;
-}
+.success-icon { width: 70px; height: 70px; background: var(--green-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 1.2rem; border: 2px solid #bbf7d0; }
 .success-screen h2 { font-size: 1.3rem; font-weight: 700; color: var(--navy); margin-bottom: 0.5rem; }
 .success-screen p { color: var(--muted); font-size: 0.88rem; line-height: 1.6; max-width: 340px; margin: 0 auto 0.5rem; }
-.success-plan {
-display: inline-block; background: var(--navy); color: white;
-padding: 0.4rem 1rem; border-radius: 20px;
-font-size: 0.82rem; font-weight: 700; margin: 1rem 0;
-}
-
-/* Error toast */
-.error-toast {
-position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
-background: var(--red); color: white; padding: 1rem 1.5rem;
-border-radius: 8px; font-size: 0.88rem; font-weight: 600;
-box-shadow: 0 4px 20px rgba(230,51,41,0.3);
-display: none; z-index: 1000; animation: fadeInUp 0.3s ease;
-}
-.error-toast.show { display: block; }
-@keyframes fadeInUp {
-from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-to { opacity: 1; transform: translateX(-50%) translateY(0); }
-}
+.success-plan { display: inline-block; background: var(--navy); color: white; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.82rem; font-weight: 700; margin: 1rem 0; }
+.success-logo { width: 80px; margin: 0 auto 1rem; display: block; }
 
 .page { display: none; }
 .page.active { display: block; }
 
 @media (max-width: 480px) {
-.card { padding: 1.4rem; }
-.form-row { grid-template-columns: 1fr; }
-.factura-toggle { grid-template-columns: 1fr; }
+  .card { padding: 1.4rem; }
+  .form-row { grid-template-columns: 1fr; }
+  .factura-toggle { grid-template-columns: 1fr; }
+  .phone-input-wrap { flex-direction: column; gap: 0.4rem; }
+  .country-selector { width: 100%; }
+  .logo-img { width: 90px; height: 90px; }
 }
 </style>
 </head>
 <body>
 
+<!-- HEADER CON LOGO -->
 <div class="header">
-<div class="logo-mark">MC<span>smart</span></div>
-<h1>Contratar MCTags NFC</h1>
-<p>Rellena el formulario y en menos de 24h te configuramos tus etiquetas y te las enviamos.</p>
+  <div class="header-logo">
+    <img
+      class="logo-img"
+      src="https://https://res.cloudinary.com/mcsmart/image/upload/v1783854180/keromvyxa7frmcanusha.png"
+      alt="MCsmart logo"
+      onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='inline-block';"
+    />
+    <!-- Fallback texto si la imagen falla -->
+    <div id="logoFallback" style="display:none; background:var(--navy); color:white; font-size:1.1rem; font-weight:800; padding:0.4rem 0.9rem; border-radius:6px; letter-spacing:0.05rem; margin-bottom:0.5rem;">
+      MC<span style="color:var(--red)">smart</span>
+    </div>
+  </div>
+  <h1>Contratar MCTags NFC</h1>
+  <p>Rellena el formulario y en menos de 24h te configuramos tus etiquetas y te las enviamos.</p>
 </div>
 
 <div class="progress-wrap" id="progressWrap">
-<div class="progress-steps">
-<div class="step active" id="step1">
-<div class="step-dot">1</div>
-<div class="step-label">Tu negocio</div>
-</div>
-<div class="step-line" id="line1"></div>
-<div class="step" id="step2">
-<div class="step-dot">2</div>
-<div class="step-label">Plan</div>
-</div>
-<div class="step-line" id="line2"></div>
-<div class="step" id="step3">
-<div class="step-dot">3</div>
-<div class="step-label">Facturación</div>
-</div>
-</div>
+  <div class="progress-steps">
+    <div class="step active" id="step1"><div class="step-dot">1</div><div class="step-label">Tu negocio</div></div>
+    <div class="step-line" id="line1"></div>
+    <div class="step" id="step2"><div class="step-dot">2</div><div class="step-label">Plan</div></div>
+    <div class="step-line" id="line2"></div>
+    <div class="step" id="step3"><div class="step-dot">3</div><div class="step-label">Facturación</div></div>
+  </div>
 </div>
 
 <div class="card" id="mainCard">
 
-<!-- Honeypot anti-spam -->
-<div class="hp-field" aria-hidden="true">
-<label for="hp_website">Website</label>
-<input type="text" id="hp_website" name="website" tabindex="-1" autocomplete="off"/>
-</div>
+  <!-- PÁGINA 1 -->
+  <div class="page active" id="page1">
+    <div class="section-header">
+      <div class="section-label">Paso 1 de 3</div>
+      <div class="section-title">Datos de tu negocio</div>
+    </div>
 
-<div class="page active" id="page1">
-<div class="section-header">
-<div class="section-label">Paso 1 de 3</div>
-<div class="section-title">Datos de tu negocio</div>
-</div>
+    <!-- BLOQUE IDENTIFICACIÓN DEL NEGOCIO -->
+    <div class="negocio-group">
+      <div class="negocio-group-label">Identificación del negocio</div>
 
-<div class="form-group">
-<label class="field-label" for="neg_nombre">Nombre del negocio <span class="req">*</span></label>
-<input type="text" id="neg_nombre" name="nombre_negocio" placeholder="Ej: Bar El Rincón" autocomplete="organization"/>
-<div class="error-msg" id="err_neg_nombre">Este campo es obligatorio</div>
-</div>
+      <div class="form-group" style="margin-bottom:0.8rem;">
+        <label class="field-label">Nombre del negocio <span class="req">*</span></label>
+        <input type="text" id="neg_nombre" placeholder="Ej: Bar El Rincón"/>
+        <div class="error-msg" id="err_neg_nombre">Este campo es obligatorio</div>
+      </div>
 
-<div class="form-row">
-<div class="form-group">
-<label class="field-label" for="neg_telefono">Teléfono / WhatsApp <span class="req">*</span></label>
-<input type="tel" id="neg_telefono" name="telefono" placeholder="+34 6XX XXX XXX" autocomplete="tel"/>
-<div class="error-msg" id="err_neg_telefono">Introduce un teléfono válido</div>
-</div>
-<div class="form-group">
-<label class="field-label" for="neg_email">Email <span class="opt">(opcional)</span></label>
-<input type="email" id="neg_email" name="email" placeholder="info@tunegocio.com" autocomplete="email"/>
-<div class="error-msg" id="err_neg_email">Introduce un email válido</div>
-</div>
-</div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="field-label">Dirección del negocio <span class="req">*</span></label>
+        <input type="text" id="neg_direccion" placeholder="Ej: Calle Mayor 12, 46001 Valencia"/>
+        <div class="error-msg" id="err_neg_direccion">Introduce la dirección del negocio</div>
+        <div class="hint">Calle, número y ciudad. Nos ayuda a localizar tu negocio con precisión.</div>
+      </div>
+    </div>
 
-<div class="form-row">
-<div class="form-group">
-<label class="field-label" for="neg_ciudad">Ciudad <span class="req">*</span></label>
-<input type="text" id="neg_ciudad" name="ciudad" placeholder="Ej: Valencia" autocomplete="address-level2"/>
-<div class="error-msg" id="err_neg_ciudad">Introduce la ciudad</div>
-</div>
-<div class="form-group">
-<label class="field-label" for="neg_tipo">Tipo de negocio <span class="opt">(opcional)</span></label>
-<select id="neg_tipo" name="tipo_negocio">
-<option value="">Selecciona...</option>
-<option>Bar / Cafetería</option>
-<option>Restaurante</option>
-<option>Estudio de tatuajes</option>
-<option>Peluquería / Barbería</option>
-<option>Clínica / Estética</option>
-<option>Gimnasio</option>
-<option>Tienda / Comercio</option>
-<option>Hotel / Alojamiento</option>
-<option>Otro</option>
-</select>
-</div>
-</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="field-label">Teléfono / WhatsApp <span class="req">*</span></label>
+        <div class="phone-input-wrap">
+          <div class="country-selector" id="countrySelector">
+            <div class="country-selected" id="countrySelected">
+              <span class="flag">🇪🇸</span><span class="code">+34</span><span class="arrow">▾</span>
+            </div>
+            <div class="country-dropdown" id="countryDropdown">
+              <input type="text" class="country-search" id="countrySearch" placeholder="Buscar país...">
+              <div class="country-list" id="countryList"></div>
+            </div>
+          </div>
+          <input type="tel" id="neg_telefono" placeholder="6XX XXX XXX" class="phone-number-input"/>
+        </div>
+        <div class="error-msg" id="err_neg_telefono">Introduce un teléfono válido</div>
+      </div>
+      <div class="form-group">
+        <label class="field-label">Email <span class="opt">(opcional)</span></label>
+        <input type="email" id="neg_email" placeholder="info@tunegocio.com"/>
+      </div>
+    </div>
 
-<div class="form-group">
-<label class="field-label" for="neg_gmaps">Enlace a tu ficha de Google Maps <span class="opt">(opcional)</span></label>
-<input type="url" id="neg_gmaps" name="google_maps" placeholder="https://maps.google.com/..." autocomplete="off"/>
-<div class="error-msg" id="err_neg_gmaps">Introduce una URL válida</div>
-</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="field-label">Ciudad <span class="req">*</span></label>
+        <input type="text" id="neg_ciudad" placeholder="Ej: Valencia"/>
+        <div class="error-msg" id="err_neg_ciudad">Introduce la ciudad</div>
+      </div>
+      <div class="form-group">
+        <label class="field-label">Tipo de negocio <span class="opt">(opcional)</span></label>
+        <select id="neg_tipo">
+          <option value="">Selecciona...</option>
+          <option>Bar / Cafetería</option><option>Restaurante</option>
+          <option>Estudio de tatuajes</option><option>Peluquería / Barbería</option>
+          <option>Clínica / Estética</option><option>Gimnasio</option>
+          <option>Tienda / Comercio</option><option>Hotel / Alojamiento</option>
+          <option>Otro</option>
+        </select>
+      </div>
+    </div>
 
-<div class="form-group">
-<label class="field-label" for="neg_carta">Enlace a tu Carta Digital o Web <span class="opt">(opcional)</span></label>
-<input type="url" id="neg_carta" name="carta" placeholder="https://tucarta.com/..." autocomplete="off"/>
-<div class="error-msg" id="err_neg_carta">Introduce una URL válida</div>
-</div>
+    <div class="form-group">
+      <label class="field-label">Enlace a tu ficha de Google Maps <span class="opt">(opcional)</span></label>
+      <input type="url" id="neg_gmaps" placeholder="Para configurar las reseñas directas"/>
+    </div>
 
-<div class="nav-buttons">
-<button class="btn-next" onclick="irPagina(2)"><span class="btn-text">Siguiente → Elegir plan</span></button>
-</div>
-</div>
+    <div class="form-group">
+      <label class="field-label">Enlace a tu Carta Digital o Web <span class="opt">(opcional)</span></label>
+      <input type="url" id="neg_carta_url" placeholder="https://..."/>
+      <div class="hint">O sube tu carta/menú en PDF o imagen (máx 5 archivos, 10MB c/u):</div>
+      <div class="file-upload-wrap">
+        <button type="button" class="btn-file" id="btnFile" onclick="document.getElementById('neg_carta_files').click()">📎 Subir archivo(s)</button>
+        <input type="file" id="neg_carta_files" multiple accept=".pdf,image/*" style="display:none" onchange="handleFileSelect(this)">
+        <div id="fileList" class="file-list"></div>
+      </div>
+    </div>
 
-<div class="page" id="page2">
-<div class="section-header">
-<div class="section-label">Paso 2 de 3</div>
-<div class="section-title">Elige tu plan</div>
-</div>
+    <div class="nav-buttons">
+      <button class="btn-next" onclick="irPagina(2)">Siguiente → Elegir plan</button>
+    </div>
+  </div>
 
-<div class="planes-grid">
+  <!-- PÁGINA 2 -->
+  <div class="page" id="page2">
+    <div class="section-header">
+      <div class="section-label">Paso 2 de 3</div>
+      <div class="section-title">Elige tu plan</div>
+    </div>
 
-<div class="plan-card" data-plan="MC Go" data-setup="49" data-mensual="15" data-tags="20" onclick="seleccionarPlan(this)">
-<div class="plan-radio"></div>
-<div class="plan-info">
-<div class="plan-name">MC Go</div>
-<div class="plan-tags-count">20 MCTags incluidas</div>
-</div>
-<div class="plan-precio">
-<span class="plan-setup">49€ pago inicial</span>
-<span class="plan-mensual">15€ <span>/ mes</span></span>
-</div>
-</div>
+    <div class="planes-grid">
+      <div class="plan-card" data-plan="MC Go" data-setup="49" data-mensual="15" data-tags="20" onclick="seleccionarPlan(this)">
+        <div class="plan-radio"></div>
+        <div class="plan-info"><div class="plan-name">MC Go</div><div class="plan-tags-count">20 MCTags incluidas</div></div>
+        <div class="plan-precio"><span class="plan-setup">49€ pago inicial</span><span class="plan-mensual">15€ <span>/ mes</span></span></div>
+      </div>
 
-<div class="plan-card" data-plan="MC Extra" data-setup="69" data-mensual="25" data-tags="35" onclick="seleccionarPlan(this)">
-<div class="plan-popular-badge">Más popular</div>
-<div class="plan-radio"></div>
-<div class="plan-info">
-<div class="plan-name">MC Extra</div>
-<div class="plan-tags-count">35 MCTags incluidas</div>
-</div>
-<div class="plan-precio">
-<span class="plan-setup">69€ pago inicial</span>
-<span class="plan-mensual">25€ <span>/ mes</span></span>
-</div>
-</div>
+      <div class="plan-card" data-plan="MC Extra" data-setup="69" data-mensual="25" data-tags="35" onclick="seleccionarPlan(this)">
+        <div class="plan-radio"></div>
+        <div class="plan-info"><div class="plan-name">MC Extra</div><div class="plan-tags-count">35 MCTags incluidas</div></div>
+        <div class="plan-precio"><span class="plan-setup">69€ pago inicial</span><span class="plan-mensual">25€ <span>/ mes</span></span></div>
+        <div class="plan-popular-badge">Más popular</div>
+      </div>
 
-<div class="plan-card" data-plan="MC Pro" data-setup="99" data-mensual="35" data-tags="50" onclick="seleccionarPlan(this)">
-<div class="plan-radio"></div>
-<div class="plan-info">
-<div class="plan-name">MC Pro</div>
-<div class="plan-tags-count">50 MCTags incluidas</div>
-</div>
-<div class="plan-precio">
-<span class="plan-setup">99€ pago inicial</span>
-<span class="plan-mensual">35€ <span>/ mes</span></span>
-</div>
-</div>
+      <div class="plan-card" data-plan="MC Pro" data-setup="99" data-mensual="35" data-tags="50" onclick="seleccionarPlan(this)">
+        <div class="plan-radio"></div>
+        <div class="plan-info"><div class="plan-name">MC Pro</div><div class="plan-tags-count">50 MCTags incluidas</div></div>
+        <div class="plan-precio"><span class="plan-setup">99€ pago inicial</span><span class="plan-mensual">35€ <span>/ mes</span></span></div>
+      </div>
 
-<div class="plan-card" data-plan="MC Enterprise" data-setup="149" data-mensual="50" data-tags="100" onclick="seleccionarPlan(this)">
-<div class="plan-radio"></div>
-<div class="plan-info">
-<div class="plan-name">MC Enterprise</div>
-<div class="plan-tags-count">Hasta 100 MCTags</div>
-</div>
-<div class="plan-precio">
-<span class="plan-setup">149€ pago inicial</span>
-<span class="plan-mensual">50€ <span>/ mes</span></span>
-</div>
-</div>
+      <div class="plan-card" data-plan="MC Enterprise" data-setup="149" data-mensual="50" data-tags="100" onclick="seleccionarPlan(this)">
+        <div class="plan-radio"></div>
+        <div class="plan-info"><div class="plan-name">MC Enterprise</div><div class="plan-tags-count">Hasta 100 MCTags</div></div>
+        <div class="plan-precio"><span class="plan-setup">149€ pago inicial</span><span class="plan-mensual">50€ <span>/ mes</span></span></div>
+      </div>
+    </div>
+    <div class="error-msg" id="err_plan" style="margin-top:0.5rem;">Selecciona un plan para continuar</div>
 
-</div>
-<div class="error-msg" id="err_plan" style="margin-top:0.5rem;">Selecciona un plan para continuar</div>
+    <div class="nav-buttons">
+      <button class="btn-back" onclick="irPagina(1)">← Atrás</button>
+      <button class="btn-next" onclick="irPagina(3)">Siguiente → Facturación</button>
+    </div>
+  </div>
 
-<div class="nav-buttons">
-<button class="btn-back" onclick="irPagina(1)">← Atrás</button>
-<button class="btn-next" onclick="irPagina(3)"><span class="btn-text">Siguiente → Facturación</span></button>
-</div>
-</div>
+  <!-- PÁGINA 3 -->
+  <div class="page" id="page3">
+    <div class="section-header">
+      <div class="section-label">Paso 3 de 3</div>
+      <div class="section-title">Facturación</div>
+    </div>
 
-<div class="page" id="page3">
-<div class="section-header">
-<div class="section-label">Paso 3 de 3</div>
-<div class="section-title">Facturación</div>
-</div>
+    <div class="resumen-box" id="resumenBox">
+      <div class="resumen-label">Plan seleccionado</div>
+      <div class="resumen-plan" id="resumenNombre">—</div>
+      <div class="resumen-precios" id="resumenPrecios">—</div>
+      <div class="iva-note" id="ivaNote">IVA e impuestos incluidos</div>
+    </div>
 
-<div class="resumen-box" id="resumenBox">
-<div class="resumen-label">Plan seleccionado</div>
-<div class="resumen-plan" id="resumenNombre">—</div>
-<div class="resumen-precios" id="resumenPrecios">—</div>
-<div class="iva-note" id="ivaNote">IVA e impuestos incluidos</div>
-</div>
+    <div class="codigo-wrap">
+      <label class="field-label">¿Dispones de un código de asesor autorizado? <span class="opt">(opcional)</span></label>
+      <div class="codigo-input-wrap">
+        <span class="codigo-icon">🔑</span>
+        <input type="text" id="codigoAsesor" placeholder="Introduce el código si te lo ha facilitado tu asesor" oninput="comprobarCodigo()"/>
+      </div>
+      <div class="codigo-success" id="codigoSuccess">¡Código de asesor aplicado! Se ha activado la tarifa exclusiva MC Lite (5 MCTags).</div>
+    </div>
 
-<div class="codigo-wrap">
-<label class="field-label" for="codigoAsesor">¿Dispones de un código de asesor autorizado? <span class="opt">(opcional)</span></label>
-<div class="codigo-input-wrap">
-<span class="codigo-icon">🔑</span>
-<input type="text" id="codigoAsesor" name="codigo_asesor" placeholder="Introduce el código si te lo ha facilitado tu asesor" oninput="comprobarCodigo()" autocomplete="off"/>
-</div>
-<div class="codigo-success" id="codigoSuccess">¡Código de asesor aplicado! Se ha activado la tarifa exclusiva MC Lite (5 MCTags).</div>
-</div>
+    <div class="factura-label-row">
+      <label class="field-label">Selecciona tu modalidad de pago <span class="req">*</span></label>
+    </div>
 
-<div class="factura-label-row">
-<label class="field-label">Selecciona tu modalidad de pago <span class="req">*</span></label>
-</div>
+    <div class="factura-toggle">
+      <button class="toggle-btn" id="btnPromo" onclick="setFactura('promo')">
+        <span class="icon">👌</span><span class="lbl">Tarifa Promocional Directa</span>
+        <span class="sub">Pago rápido (Bizum/Efectivo). Ahorra el recargo administrativo.</span>
+      </button>
+      <button class="toggle-btn" id="btnCorp" onclick="setFactura('corp')">
+        <span class="icon">🧾</span><span class="lbl">Tarifa Corporativa (+21%)</span>
+        <span class="sub">Requiere Factura Completa y procesamiento de datos fiscales (CIF).</span>
+      </button>
+    </div>
+    <div class="error-msg" id="err_factura" style="margin-top:-0.5rem; margin-bottom:1rem;">Selecciona una modalidad de pago</div>
 
-<div class="factura-toggle">
-<button class="toggle-btn" id="btnPromo" onclick="setFactura('promo')">
-<span class="icon">👌</span>
-<span class="lbl">Tarifa Promocional Directa</span>
-<span class="sub">Pago rápido (Bizum/Efectivo). Ahorra el recargo administrativo.</span>
-</button>
-<button class="toggle-btn" id="btnCorp" onclick="setFactura('corp')">
-<span class="icon">🧾</span>
-<span class="lbl">Tarifa Corporativa (+21%)</span>
-<span class="sub">Requiere Factura Completa y procesamiento de datos fiscales (CIF).</span>
-</button>
-</div>
-<div class="error-msg" id="err_factura" style="margin-top:-0.5rem; margin-bottom:1rem;">Selecciona una modalidad de pago</div>
+    <div class="factura-fields" id="facturaFields">
+      <div class="factura-section-label">Datos de facturación</div>
+      <div class="form-group">
+        <label class="field-label">Razón social o nombre completo <span class="req">*</span></label>
+        <input type="text" id="fact_nombre" placeholder="Ej: Bar El Rincón S.L. / Juan García López"/>
+        <div class="error-msg" id="err_fact_nombre">Este campo es obligatorio</div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="field-label">CIF / NIF <span class="req">*</span></label>
+          <input type="text" id="fact_cif" placeholder="Ej: B12345678"/>
+          <div class="error-msg" id="err_fact_cif">Introduce el CIF o NIF</div>
+        </div>
+        <div class="form-group">
+          <label class="field-label">Email para facturas <span class="req">*</span></label>
+          <input type="email" id="fact_email" placeholder="admin@empresa.com"/>
+          <div class="error-msg" id="err_fact_email">Introduce un email válido</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="field-label">Dirección fiscal <span class="req">*</span></label>
+        <input type="text" id="fact_direccion" placeholder="Calle, número, CP, ciudad"/>
+        <div class="error-msg" id="err_fact_direccion">Introduce la dirección fiscal</div>
+      </div>
+    </div>
 
-<div class="factura-fields" id="facturaFields">
-<div class="factura-section-label">Datos de facturación</div>
-
-<div class="form-group">
-<label class="field-label" for="fact_nombre">Razón social o nombre completo <span class="req">*</span></label>
-<input type="text" id="fact_nombre" name="razon_social" placeholder="Ej: Bar El Rincón S.L. / Juan García López" autocomplete="organization"/>
-<div class="error-msg" id="err_fact_nombre">Este campo es obligatorio</div>
-</div>
-
-<div class="form-row">
-<div class="form-group">
-<label class="field-label" for="fact_cif">CIF / NIF <span class="req">*</span></label>
-<input type="text" id="fact_cif" name="cif_nif" placeholder="Ej: B12345678" autocomplete="off" style="text-transform: uppercase;"/>
-<div class="error-msg" id="err_fact_cif">Introduce un CIF/NIF válido (Ej: B12345678)</div>
-</div>
-<div class="form-group">
-<label class="field-label" for="fact_email">Email para facturas <span class="req">*</span></label>
-<input type="email" id="fact_email" name="email_facturas" placeholder="admin@empresa.com" autocomplete="email"/>
-<div class="error-msg" id="err_fact_email">Introduce un email válido</div>
-</div>
-</div>
-
-<div class="form-group">
-<label class="field-label" for="fact_direccion">Dirección fiscal <span class="req">*</span></label>
-<input type="text" id="fact_direccion" name="direccion_fiscal" placeholder="Calle, número, CP, ciudad" autocomplete="street-address"/>
-<div class="error-msg" id="err_fact_direccion">Introduce la dirección fiscal</div>
-</div>
-</div>
-
-<div class="nav-buttons">
-<button class="btn-back" onclick="irPagina(2)">← Atrás</button>
-<button class="btn-submit" id="btnSubmit" onclick="enviar()">
-<span class="btn-text">Enviar pedido ✓</span>
-<span class="spinner"></span>
-</button>
-</div>
-</div>
+    <div class="nav-buttons">
+      <button class="btn-back" onclick="irPagina(2)">← Atrás</button>
+      <button class="btn-submit" id="btnSubmit" onclick="enviar()">Enviar pedido ✓</button>
+    </div>
+  </div>
 
 </div>
 
+<!-- SUCCESS -->
 <div class="card success-screen" id="successScreen">
-<div class="success-icon">✓</div>
-<h2>¡Pedido recibido!</h2>
-<div class="success-plan" id="successPlan">—</div>
-<p>En menos de 24h nos pondremos en contacto contigo para confirmar el pedido y coordinar el envío de tus MCTags.</p>
-<br/>
-<p style="font-size:0.78rem;">— El equipo de <strong>MCsmart</strong></p>
+  <img
+    class="success-logo"
+    src="https://res.cloudinary.com/mcsmart/image/upload/v1783854180/keromvyxa7frmcanusha.png"
+    alt="MCsmart"
+    onerror="this.style.display='none'"
+  />
+  <div class="success-icon">✓</div>
+  <h2>¡Pedido recibido!</h2>
+  <div class="success-plan" id="successPlan">—</div>
+  <p>En menos de 24h nos ponemos en contacto contigo para confirmar el pedido y coordinar el envío de tus MCTags.</p>
+  <br/>
+  <p style="font-size:0.78rem;">— El equipo de <strong>MCsmart</strong></p>
 </div>
-
-<!-- Toast de error -->
-<div class="error-toast" id="errorToast"></div>
 
 <script>
 let planSeleccionado = null;
 let planEfectivo = null;
 let facturaMode = null;
 let codigoAplicado = false;
-let isSubmitting = false;
+let selectedCartaFiles = [];
 
-const LITE = { plan: 'MC Lite', setup: 29, mensual: 5, tags: 5 };
+const LITE = { plan: 'MC Lite', setup: 29, mensual: 7, tags: 5 };
 
-// Guardar datos en localStorage para recuperación
-const STORAGE_KEY = 'mcsmart_form_draft';
+// ============================================
+// CLOUDINARY
+// ============================================
+const CLOUDINARY_CLOUD_NAME = 'mcsmart';
+const CLOUDINARY_UPLOAD_PRESET = 'mcsmart_cartas';
 
-function guardarDraft() {
-  if (!planSeleccionado) return;
-  const data = {
-    neg_nombre: document.getElementById('neg_nombre').value,
-    neg_telefono: document.getElementById('neg_telefono').value,
-    neg_email: document.getElementById('neg_email').value,
-    neg_ciudad: document.getElementById('neg_ciudad').value,
-    neg_tipo: document.getElementById('neg_tipo').value,
-    neg_gmaps: document.getElementById('neg_gmaps').value,
-    neg_carta: document.getElementById('neg_carta').value,
-    plan: planSeleccionado.plan,
-    facturaMode: facturaMode,
-    fact_nombre: document.getElementById('fact_nombre').value,
-    fact_cif: document.getElementById('fact_cif').value,
-    fact_email: document.getElementById('fact_email').value,
-    fact_direccion: document.getElementById('fact_direccion').value,
-  };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+// ============================================
+// WHATSAPP (CallMeBot)
+// ============================================
+const WHATSAPP_NUMERO = '34667705084';
+const WHATSAPP_APIKEY = '3027963';
+
+// === COUNTRY SELECTOR ===
+const countries = [
+  { code: '+34', flag: '🇪🇸', name: 'España' },
+  { code: '+351', flag: '🇵🇹', name: 'Portugal' },
+  { code: '+33', flag: '🇫🇷', name: 'Francia' },
+  { code: '+376', flag: '🇦🇩', name: 'Andorra' },
+  { code: '+212', flag: '🇲🇦', name: 'Marruecos' },
+  { code: '+39', flag: '🇮🇹', name: 'Italia' },
+  { code: '+49', flag: '🇩🇪', name: 'Alemania' },
+  { code: '+44', flag: '🇬🇧', name: 'Reino Unido' },
+  { code: '+52', flag: '🇲🇽', name: 'México' },
+  { code: '+54', flag: '🇦🇷', name: 'Argentina' },
+  { code: '+57', flag: '🇨🇴', name: 'Colombia' },
+  { code: '+1',  flag: '🇺🇸', name: 'EE.UU.' },
+];
+
+let selectedCountry = countries[0];
+const selEl    = document.getElementById('countrySelected');
+const dropEl   = document.getElementById('countryDropdown');
+const listEl   = document.getElementById('countryList');
+const searchEl = document.getElementById('countrySearch');
+
+function renderList(filter = '') {
+  listEl.innerHTML = '';
+  const f = filter.toLowerCase();
+  countries
+    .filter(c => c.name.toLowerCase().includes(f) || c.code.includes(f))
+    .forEach(c => {
+      const div = document.createElement('div');
+      div.className = 'country-item';
+      div.innerHTML = `<span class="flag">${c.flag}</span><span class="name">${c.name}</span><span class="code-label">${c.code}</span>`;
+      div.onclick = () => selectCountry(c);
+      listEl.appendChild(div);
+    });
 }
 
-function cargarDraft() {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (!saved) return;
-  
-  try {
-    const data = JSON.parse(saved);
-    if (data.neg_nombre) document.getElementById('neg_nombre').value = data.neg_nombre;
-    if (data.neg_telefono) document.getElementById('neg_telefono').value = data.neg_telefono;
-    if (data.neg_email) document.getElementById('neg_email').value = data.neg_email;
-    if (data.neg_ciudad) document.getElementById('neg_ciudad').value = data.neg_ciudad;
-    if (data.neg_tipo) document.getElementById('neg_tipo').value = data.neg_tipo;
-    if (data.neg_gmaps) document.getElementById('neg_gmaps').value = data.neg_gmaps;
-    if (data.neg_carta) document.getElementById('neg_carta').value = data.neg_carta;
-    if (data.fact_nombre) document.getElementById('fact_nombre').value = data.fact_nombre;
-    if (data.fact_cif) document.getElementById('fact_cif').value = data.fact_cif;
-    if (data.fact_email) document.getElementById('fact_email').value = data.fact_email;
-    if (data.fact_direccion) document.getElementById('fact_direccion').value = data.fact_direccion;
-    if (data.facturaMode) setFactura(data.facturaMode);
-  } catch (e) {
-    console.warn('Error al cargar draft:', e);
-  }
+function selectCountry(c) {
+  selectedCountry = c;
+  selEl.querySelector('.flag').textContent = c.flag;
+  selEl.querySelector('.code').textContent = c.code;
+  dropEl.classList.remove('open');
+  searchEl.value = '';
 }
 
-function limpiarDraft() {
-  localStorage.removeItem(STORAGE_KEY);
+selEl.onclick = (e) => {
+  e.stopPropagation();
+  dropEl.classList.toggle('open');
+  if (dropEl.classList.contains('open')) searchEl.focus();
+};
+searchEl.oninput = () => renderList(searchEl.value);
+document.addEventListener('click', (e) => {
+  if (!document.getElementById('countrySelector').contains(e.target)) dropEl.classList.remove('open');
+});
+renderList();
+
+// === CLOUDINARY UPLOAD ===
+async function uploadToCloudinary(file) {
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`, {
+    method: 'POST', body: fd
+  });
+  if (!res.ok) throw new Error('Upload failed');
+  const data = await res.json();
+  return data.secure_url;
 }
 
-function showToast(msg) {
-  const toast = document.getElementById('errorToast');
-  toast.textContent = msg;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 4000);
+function handleFileSelect(input) {
+  const files = Array.from(input.files);
+  if (!files.length) return;
+  const slots = 5 - selectedCartaFiles.length;
+  files.slice(0, slots).forEach(file => {
+    if (file.size > 10 * 1024 * 1024) { alert(`"${file.name}" supera los 10MB.`); return; }
+    const entry = { name: file.name, url: null, status: 'uploading' };
+    selectedCartaFiles.push(entry);
+    renderFileList();
+    uploadToCloudinary(file)
+      .then(url => { entry.url = url; entry.status = 'done'; renderFileList(); })
+      .catch(() => { entry.status = 'error'; renderFileList(); });
+  });
+  input.value = '';
 }
 
+function renderFileList() {
+  const container = document.getElementById('fileList');
+  container.innerHTML = '';
+  selectedCartaFiles.forEach((f, i) => {
+    const tag = document.createElement('div');
+    tag.className = 'file-tag ' + (f.status === 'error' ? 'error-file' : f.status);
+    let st = '';
+    if (f.status === 'uploading') st = `<span class="spinner"></span><span class="status">Subiendo…</span>`;
+    if (f.status === 'done')      st = `<span class="status">✓ Listo</span>`;
+    if (f.status === 'error')     st = `<span class="status">✕ Error</span>`;
+    tag.innerHTML = `<span class="file-name">${f.name}</span>${st}<span class="remove" onclick="removeFile(${i})">×</span>`;
+    container.appendChild(tag);
+  });
+  document.getElementById('btnFile').disabled = selectedCartaFiles.length >= 5;
+}
+
+function removeFile(i) {
+  selectedCartaFiles.splice(i, 1);
+  renderFileList();
+}
+
+function hayArchivosSubiendo() {
+  return selectedCartaFiles.some(f => f.status === 'uploading');
+}
+
+// === NAVEGACIÓN ===
 function irPagina(num) {
   if (num === 2 && !validarPagina1()) return;
   if (num === 3 && !validarPagina2()) return;
-
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page' + num).classList.add('active');
-
   for (let i = 1; i <= 3; i++) {
     const s = document.getElementById('step' + i);
     s.classList.remove('active', 'done');
     if (i < num) s.classList.add('done');
     else if (i === num) s.classList.add('active');
   }
-  for (let i = 1; i <= 2; i++) {
-    document.getElementById('line' + i).classList.toggle('done', i < num);
-  }
-
+  for (let i = 1; i <= 2; i++) document.getElementById('line' + i).classList.toggle('done', i < num);
   if (num === 3) actualizarResumen();
-
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// === PLAN ===
 function seleccionarPlan(el) {
   document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
   planSeleccionado = {
-    plan: el.dataset.plan,
-    setup: parseFloat(el.dataset.setup),
-    mensual: parseFloat(el.dataset.mensual),
-    tags: el.dataset.tags,
+    plan: el.dataset.plan, setup: parseFloat(el.dataset.setup),
+    mensual: parseFloat(el.dataset.mensual), tags: el.dataset.tags,
   };
   planEfectivo = { ...planSeleccionado };
   codigoAplicado = false;
   document.getElementById('err_plan').style.display = 'none';
-  guardarDraft();
 }
 
+// === CÓDIGO ASESOR ===
 function comprobarCodigo() {
   const val = document.getElementById('codigoAsesor').value.trim().toLowerCase();
   const successEl = document.getElementById('codigoSuccess');
-
   if (val === 'javi29' && planSeleccionado && planSeleccionado.plan === 'MC Go') {
-    codigoAplicado = true;
-    planEfectivo = { ...LITE };
-    successEl.style.display = 'block';
+    codigoAplicado = true; planEfectivo = { ...LITE }; successEl.style.display = 'block';
   } else {
-    codigoAplicado = false;
-    planEfectivo = planSeleccionado ? { ...planSeleccionado } : null;
-    successEl.style.display = 'none';
+    codigoAplicado = false; planEfectivo = planSeleccionado ? { ...planSeleccionado } : null; successEl.style.display = 'none';
   }
-
   if (planEfectivo) actualizarResumen();
 }
 
+// === RESUMEN ===
 function actualizarResumen() {
   if (!planEfectivo) return;
-
   const conIva = facturaMode === 'corp';
-  const setup = conIva ? (planEfectivo.setup * 1.21).toFixed(2) : planEfectivo.setup;
+  const setup   = conIva ? (planEfectivo.setup   * 1.21).toFixed(2) : planEfectivo.setup;
   const mensual = conIva ? (planEfectivo.mensual * 1.21).toFixed(2) : planEfectivo.mensual;
-
-  const nombreDisplay = codigoAplicado
-    ? 'MC Lite (Plan Restringido)'
-    : planEfectivo.plan;
-
-  document.getElementById('resumenNombre').textContent = nombreDisplay;
-  document.getElementById('resumenPrecios').innerHTML =
-    `<strong>${setup}€</strong> pago inicial · <strong>${mensual}€/mes</strong> · ${planEfectivo.tags} MCTags`;
-
-  const ivaNote = document.getElementById('ivaNote');
-  ivaNote.style.display = conIva ? 'block' : 'none';
+  document.getElementById('resumenNombre').textContent = codigoAplicado ? 'MC Lite (Plan descontinuado)' : planEfectivo.plan;
+  document.getElementById('resumenPrecios').innerHTML = `<strong>${setup}€</strong> pago inicial · <strong>${mensual}€/mes</strong> · ${planEfectivo.tags} MCTags`;
+  document.getElementById('ivaNote').style.display = conIva ? 'block' : 'none';
 }
 
+// === FACTURA ===
 function setFactura(mode) {
   facturaMode = mode;
-
   document.getElementById('btnPromo').className = 'toggle-btn' + (mode === 'promo' ? ' selected-promo' : '');
-  document.getElementById('btnCorp').className = 'toggle-btn' + (mode === 'corp' ? ' selected-corp' : '');
+  document.getElementById('btnCorp').className  = 'toggle-btn' + (mode === 'corp'  ? ' selected-corp'  : '');
   document.getElementById('facturaFields').classList.toggle('show', mode === 'corp');
   document.getElementById('err_factura').style.display = 'none';
-
   actualizarResumen();
-  guardarDraft();
 }
 
-// Validadores
-function esEmailValido(email) {
-  if (!email) return true; // Opcional
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function esUrlValida(url) {
-  if (!url) return true; // Opcional
-  try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-function esNifCifValido(doc) {
-  if (!doc) return false;
-  const cleaned = doc.toUpperCase().replace(/[^A-Z0-9]/g, '');
-  
-  // NIF (8 dígitos + letra)
-  if (/^[0-9]{8}[A-Z]$/.test(cleaned)) return true;
-  // NIE (X/Y/Z + 7 dígitos + letra)
-  if (/^[XYZ][0-9]{7}[A-Z]$/.test(cleaned)) return true;
-  // CIF (letra + 7 dígitos + letra/dígito)
-  if (/^[ABCDEFGHJKLMNPQS][0-9]{7}[0-9A-J]$/.test(cleaned)) return true;
-  
-  return false;
-}
-
+// === VALIDACIONES ===
 function validarPagina1() {
   let ok = true;
-  
   const campos = [
-    { id: 'neg_nombre', err: 'err_neg_nombre', check: v => v.trim() !== '', msg: 'Este campo es obligatorio' },
-    { id: 'neg_telefono', err: 'err_neg_telefono', check: v => v.trim().replace(/\s/g, '').length >= 9, msg: 'Introduce un teléfono válido' },
-    { id: 'neg_ciudad', err: 'err_neg_ciudad', check: v => v.trim() !== '', msg: 'Introduce la ciudad' },
-    { id: 'neg_email', err: 'err_neg_email', check: esEmailValido, msg: 'Introduce un email válido' },
-    { id: 'neg_gmaps', err: 'err_neg_gmaps', check: esUrlValida, msg: 'Introduce una URL válida' },
-    { id: 'neg_carta', err: 'err_neg_carta', check: esUrlValida, msg: 'Introduce una URL válida' },
+    { id: 'neg_nombre',   err: 'err_neg_nombre',   check: v => v.trim() !== '' },
+    { id: 'neg_direccion',err: 'err_neg_direccion', check: v => v.trim() !== '' },
+    { id: 'neg_telefono', err: 'err_neg_telefono',  check: v => v.replace(/\D/g,'').length >= 6 },
+    { id: 'neg_ciudad',   err: 'err_neg_ciudad',    check: v => v.trim() !== '' },
   ];
-  
   campos.forEach(c => {
-    const el = document.getElementById(c.id);
+    const el  = document.getElementById(c.id);
     const err = document.getElementById(c.err);
     const valid = c.check(el.value);
     el.classList.toggle('error', !valid);
     err.style.display = valid ? 'none' : 'block';
     if (!valid) ok = false;
   });
-  
-  if (ok) guardarDraft();
   return ok;
 }
 
 function validarPagina2() {
-  if (!planSeleccionado) {
-    document.getElementById('err_plan').style.display = 'block';
-    return false;
-  }
-  guardarDraft();
+  if (!planSeleccionado) { document.getElementById('err_plan').style.display = 'block'; return false; }
   return true;
 }
 
 function validarPagina3() {
   let ok = true;
-
-  if (!facturaMode) {
-    document.getElementById('err_factura').style.display = 'block';
-    ok = false;
-  }
-
+  if (!facturaMode) { document.getElementById('err_factura').style.display = 'block'; ok = false; }
   if (facturaMode === 'corp') {
-    const campos = [
-      { id: 'fact_nombre', err: 'err_fact_nombre', check: v => v.trim() !== '' },
-      { id: 'fact_cif', err: 'err_fact_cif', check: esNifCifValido, msg: 'Introduce un CIF/NIF válido' },
-      { id: 'fact_email', err: 'err_fact_email', check: esEmailValido },
+    [
+      { id: 'fact_nombre',    err: 'err_fact_nombre',    check: v => v.trim() !== '' },
+      { id: 'fact_cif',       err: 'err_fact_cif',       check: v => v.trim() !== '' },
+      { id: 'fact_email',     err: 'err_fact_email',     check: v => /\S+@\S+\.\S+/.test(v) },
       { id: 'fact_direccion', err: 'err_fact_direccion', check: v => v.trim() !== '' },
-    ];
-    
-    campos.forEach(c => {
-      const el = document.getElementById(c.id);
-      const err = document.getElementById(c.err);
-      const valid = c.check(el.value);
-      el.classList.toggle('error', !valid);
-      err.style.display = valid ? 'none' : 'block';
-      if (!valid) ok = false;
+    ].forEach(c => {
+      const el = document.getElementById(c.id); const err = document.getElementById(c.err);
+      const valid = c.check(el.value); el.classList.toggle('error', !valid);
+      err.style.display = valid ? 'none' : 'block'; if (!valid) ok = false;
     });
   }
-
   return ok;
 }
 
+// === ENVÍO ===
 async function enviar() {
-  // Prevenir doble envío
-  if (isSubmitting) return;
   if (!validarPagina3()) return;
+  if (hayArchivosSubiendo()) { alert('Espera a que terminen de subirse los archivos.'); return; }
 
-  // Honeypot check
-  if (document.getElementById('hp_website').value) {
-    console.log('Bot detectado');
-    return;
-  }
-
-  isSubmitting = true;
-  const btnSubmit = document.getElementById('btnSubmit');
-  const textoOriginal = btnSubmit.querySelector('.btn-text').textContent;
-  btnSubmit.classList.add('loading');
-  btnSubmit.disabled = true;
-
-  const conIva = facturaMode === 'corp';
-  const setup = conIva ? (planEfectivo.setup * 1.21).toFixed(2) : planEfectivo.setup;
+  const conIva  = facturaMode === 'corp';
+  const setup   = conIva ? (planEfectivo.setup   * 1.21).toFixed(2) : planEfectivo.setup;
   const mensual = conIva ? (planEfectivo.mensual * 1.21).toFixed(2) : planEfectivo.mensual;
 
-  const payload = {
-    negocio_nombre: document.getElementById('neg_nombre').value.trim(),
-    negocio_telefono: document.getElementById('neg_telefono').value.trim(),
-    negocio_email: document.getElementById('neg_email').value.trim(),
-    negocio_ciudad: document.getElementById('neg_ciudad').value.trim(),
-    negocio_tipo: document.getElementById('neg_tipo').value,
-    negocio_gmaps: document.getElementById('neg_gmaps').value.trim(),
-    negocio_carta: document.getElementById('neg_carta').value.trim(),
-    plan_nombre: planEfectivo.plan,
-    plan_tags: planEfectivo.tags,
-    plan_setup: setup,
-    plan_mensual: mensual,
-    codigo_lite: codigoAplicado,
-    fact_modalidad: facturaMode === 'corp' ? 'Corporativa' : 'Promocional',
-    fact_nombre: facturaMode === 'corp' ? document.getElementById('fact_nombre').value.trim() : '',
-    fact_cif: facturaMode === 'corp' ? document.getElementById('fact_cif').value.trim() : '',
-    fact_email: facturaMode === 'corp' ? document.getElementById('fact_email').value.trim() : '',
-    fact_direccion: facturaMode === 'corp' ? document.getElementById('fact_direccion').value.trim() : '',
-  };
+  const telefonoCompleto = selectedCountry.code + ' ' + document.getElementById('neg_telefono').value.trim();
+  const cartaUrl = document.getElementById('neg_carta_url').value.trim();
+  const labelPlan = codigoAplicado ? 'MC Lite (Descontinuado)' : planEfectivo.plan;
 
-  try {
-    const response = await fetch('/api/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+  const btn = document.getElementById('btnSubmit');
+  btn.textContent = 'Enviando…'; btn.disabled = true;
+
+  // Construir mensaje WhatsApp
+  let msg = `🆕 NUEVO PEDIDO MCsmart\n`;
+  msg += `📅 ${new Date().toLocaleString('es-ES')}\n\n`;
+  msg += `━━━━ NEGOCIO ━━━━\n`;
+  msg += `🏪 Nombre: ${document.getElementById('neg_nombre').value.trim()}\n`;
+  msg += `📍 Dirección: ${document.getElementById('neg_direccion').value.trim()}\n`;
+  msg += `🏙️ Ciudad: ${document.getElementById('neg_ciudad').value.trim()}\n`;
+  msg += `🏷️ Tipo: ${document.getElementById('neg_tipo').value || '-'}\n`;
+  msg += `📞 Teléfono: ${telefonoCompleto}\n`;
+  msg += `📧 Email: ${document.getElementById('neg_email').value.trim() || '-'}\n`;
+  msg += `🗺️ Maps: ${document.getElementById('neg_gmaps').value.trim() || '-'}\n`;
+  msg += `📋 Carta URL: ${cartaUrl || '-'}\n`;
+
+  if (selectedCartaFiles.length > 0) {
+    msg += `📎 Archivos carta:\n`;
+    selectedCartaFiles.forEach(f => {
+      msg += f.status === 'done'
+        ? `   • ${f.name}\n     ${f.url}\n`
+        : `   • ${f.name} ⚠️ Error al subir\n`;
     });
-
-    if (!response.ok) {
-      throw new Error('Error en la respuesta');
-    }
-
-    const result = await response.json();
-
-    // Éxito
-    limpiarDraft();
-    
-    const labelPlan = codigoAplicado
-      ? 'MC Lite · 5 MCTags'
-      : `${planEfectivo.plan} · ${planEfectivo.tags} MCTags`;
-
-    document.getElementById('successPlan').textContent = labelPlan;
-    document.getElementById('mainCard').style.display = 'none';
-    document.getElementById('progressWrap').style.display = 'none';
-    document.getElementById('successScreen').style.display = 'block';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  } catch (error) {
-    console.error('Error:', error);
-    showToast('❌ Error al enviar. Por favor, inténtalo de nuevo.');
-  } finally {
-    isSubmitting = false;
-    btnSubmit.classList.remove('loading');
-    btnSubmit.disabled = false;
-    btnSubmit.querySelector('.btn-text').textContent = textoOriginal;
   }
+
+  msg += `\n━━━━ PLAN ━━━━\n`;
+  msg += `💼 ${labelPlan}\n`;
+  msg += `   Tags: ${planEfectivo.tags}\n`;
+  msg += `   Setup: ${setup}€ | Mensual: ${mensual}€\n`;
+  msg += `   IVA incluido: ${conIva ? 'Sí' : 'No'}\n`;
+  msg += `   Código lite: ${codigoAplicado ? 'Sí (javi29)' : 'No'}\n`;
+
+  msg += `\n━━━━ PAGO ━━━━\n`;
+  msg += `💳 Modalidad: ${facturaMode === 'corp' ? 'Corporativa (+21% IVA)' : 'Promocional directa'}\n`;
+
+  if (facturaMode === 'corp') {
+    msg += `\n━━━━ FACTURACIÓN ━━━━\n`;
+    msg += `🏢 Razón social: ${document.getElementById('fact_nombre').value.trim()}\n`;
+    msg += `🪪 NIF/CIF: ${document.getElementById('fact_cif').value.trim()}\n`;
+    msg += `📧 Email facturas: ${document.getElementById('fact_email').value.trim()}\n`;
+    msg += `📮 Dir. fiscal: ${document.getElementById('fact_direccion').value.trim()}\n`;
+  }
+
+  const urlWA = `https://api.callmebot.com/whatsapp.php?phone=${WHATSAPP_NUMERO}&text=${encodeURIComponent(msg)}&apikey=${WHATSAPP_APIKEY}`;
+
+  try { await fetch(urlWA); } catch (e) { console.warn('Error WA:', e); }
+
+  document.getElementById('successPlan').textContent =
+    codigoAplicado ? 'MC Lite · 5 MCTags' : `${planEfectivo.plan} · ${planEfectivo.tags} MCTags`;
+  document.getElementById('mainCard').style.display = 'none';
+  document.getElementById('progressWrap').style.display = 'none';
+  document.getElementById('successScreen').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  btn.textContent = 'Enviar pedido ✓'; btn.disabled = false;
 }
 
-// Inicialización
 setFactura('promo');
-cargarDraft();
-
-// Auto-guardar al escribir
-document.querySelectorAll('input, select').forEach(el => {
-  el.addEventListener('input', () => {
-    if (planSeleccionado) guardarDraft();
-  });
-});
 </script>
 </body>
 </html>

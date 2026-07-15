@@ -397,29 +397,29 @@ input.error, select.error { border-color: var(--red); box-shadow: 0 0 0 3px rgba
     </div>
 
     <div class="planes-grid">
-      <div class="plan-card" data-plan="MC Go" data-setup="49" data-mensual="15" data-tags="20" onclick="seleccionarPlan(this)">
+      <div class="plan-card" data-plan="MC Go" data-setup="49" data-tags="20" onclick="seleccionarPlan(this)">
         <div class="plan-radio"></div>
         <div class="plan-info"><div class="plan-name">MC Go</div><div class="plan-tags-count">20 MCTags incluidas</div></div>
-        <div class="plan-precio"><span class="plan-setup">49€ pago inicial</span><span class="plan-mensual">15€ <span>/ mes</span></span></div>
+        <div class="plan-precio"><span class="plan-mensual">49€ <span>pago único</span></span></div>
       </div>
 
-      <div class="plan-card" data-plan="MC Extra" data-setup="69" data-mensual="25" data-tags="35" onclick="seleccionarPlan(this)">
+      <div class="plan-card" data-plan="MC Extra" data-setup="69" data-tags="35" onclick="seleccionarPlan(this)">
         <div class="plan-radio"></div>
         <div class="plan-info"><div class="plan-name">MC Extra</div><div class="plan-tags-count">35 MCTags incluidas</div></div>
-        <div class="plan-precio"><span class="plan-setup">69€ pago inicial</span><span class="plan-mensual">25€ <span>/ mes</span></span></div>
+        <div class="plan-precio"><span class="plan-mensual">69€ <span>pago único</span></span></div>
         <div class="plan-popular-badge">Más popular</div>
       </div>
 
-      <div class="plan-card" data-plan="MC Pro" data-setup="99" data-mensual="35" data-tags="50" onclick="seleccionarPlan(this)">
+      <div class="plan-card" data-plan="MC Pro" data-setup="99" data-tags="50" onclick="seleccionarPlan(this)">
         <div class="plan-radio"></div>
         <div class="plan-info"><div class="plan-name">MC Pro</div><div class="plan-tags-count">50 MCTags incluidas</div></div>
-        <div class="plan-precio"><span class="plan-setup">99€ pago inicial</span><span class="plan-mensual">35€ <span>/ mes</span></span></div>
+        <div class="plan-precio"><span class="plan-mensual">99€ <span>pago único</span></span></div>
       </div>
 
-      <div class="plan-card" data-plan="MC Enterprise" data-setup="149" data-mensual="50" data-tags="100" onclick="seleccionarPlan(this)">
+      <div class="plan-card" data-plan="MC Enterprise" data-setup="149" data-tags="100" onclick="seleccionarPlan(this)">
         <div class="plan-radio"></div>
         <div class="plan-info"><div class="plan-name">MC Enterprise</div><div class="plan-tags-count">Hasta 100 MCTags</div></div>
-        <div class="plan-precio"><span class="plan-setup">149€ pago inicial</span><span class="plan-mensual">50€ <span>/ mes</span></span></div>
+        <div class="plan-precio"><span class="plan-mensual">149€ <span>pago único</span></span></div>
       </div>
     </div>
     <div class="error-msg" id="err_plan" style="margin-top:0.5rem;">Selecciona un plan para continuar</div>
@@ -450,8 +450,24 @@ input.error, select.error { border-color: var(--red); box-shadow: 0 0 0 3px rgba
         <span class="codigo-icon">🔑</span>
         <input type="text" id="codigoAsesor" placeholder="Introduce el código si te lo ha facilitado tu asesor" oninput="comprobarCodigo()"/>
       </div>
-      <div class="codigo-success" id="codigoSuccess">¡Código de asesor aplicado! Se ha activado la tarifa exclusiva MC Lite (5 MCTags).</div>
+      <div class="codigo-success" id="codigoSuccess"></div>
     </div>
+
+    <!-- NUEVO: SELECCIÓN TAGS ESTÁTICAS / MC PREMIUM -->
+    <div class="factura-label-row">
+      <label class="field-label">Elige tu servicio de etiquetas <span class="req">*</span></label>
+    </div>
+    <div class="factura-toggle">
+      <button type="button" class="toggle-btn" id="btnEstaticas" onclick="setServicio('estaticas')">
+        <span class="icon">🏷️</span><span class="lbl">Tags estáticas</span>
+        <span class="sub">Incluidas en tu plan, sin coste adicional.</span>
+      </button>
+      <button type="button" class="toggle-btn" id="btnPremium" onclick="setServicio('premium')">
+        <span class="icon">⭐</span><span class="lbl">MC Premium</span>
+        <span class="sub">Funciones avanzadas y actualizables por 10€/mes.</span>
+      </button>
+    </div>
+    <div class="error-msg" id="err_servicio" style="margin-top:-0.5rem; margin-bottom:1rem;">Selecciona una opción para continuar</div>
 
     <div class="factura-label-row">
       <label class="field-label">Selecciona tu modalidad de pago <span class="req">*</span></label>
@@ -523,10 +539,12 @@ input.error, select.error { border-color: var(--red); box-shadow: 0 0 0 3px rgba
 let planSeleccionado = null;
 let planEfectivo = null;
 let facturaMode = null;
+let servicioTags = null;
 let codigoAplicado = false;
 let selectedCartaFiles = [];
 
-const LITE = { plan: 'MC Lite', setup: 29, mensual: 7, tags: 5 };
+const LITE = { plan: 'MC Lite', setup: 29, mensual: 0, tags: 5, unidad: 'MCTags' };
+const NIDO_LITE = { plan: 'MC Lite', setup: 320, mensual: 0, tags: 10, unidad: 'placasMC' };
 
 // ============================================
 // CLOUDINARY
@@ -672,10 +690,11 @@ function seleccionarPlan(el) {
   el.classList.add('selected');
   planSeleccionado = {
     plan: el.dataset.plan, setup: parseFloat(el.dataset.setup),
-    mensual: parseFloat(el.dataset.mensual), tags: el.dataset.tags,
+    mensual: 0, tags: el.dataset.tags, unidad: 'MCTags',
   };
   planEfectivo = { ...planSeleccionado };
   codigoAplicado = false;
+  document.getElementById('codigoSuccess').style.display = 'none';
   document.getElementById('err_plan').style.display = 'none';
 }
 
@@ -683,10 +702,21 @@ function seleccionarPlan(el) {
 function comprobarCodigo() {
   const val = document.getElementById('codigoAsesor').value.trim().toLowerCase();
   const successEl = document.getElementById('codigoSuccess');
+
   if (val === 'javi29' && planSeleccionado && planSeleccionado.plan === 'MC Go') {
-    codigoAplicado = true; planEfectivo = { ...LITE }; successEl.style.display = 'block';
+    codigoAplicado = true;
+    planEfectivo = { ...LITE };
+    successEl.textContent = '¡Código de asesor aplicado! Se ha activado la tarifa exclusiva MC Lite (5 MCTags).';
+    successEl.style.display = 'block';
+  } else if (val === 'nidobilbao' && planSeleccionado && planSeleccionado.plan === 'MC Go') {
+    codigoAplicado = true;
+    planEfectivo = { ...NIDO_LITE };
+    successEl.textContent = '¡Código de asesor aplicado! Se ha activado la tarifa exclusiva MC Lite (10 placasMC).';
+    successEl.style.display = 'block';
   } else {
-    codigoAplicado = false; planEfectivo = planSeleccionado ? { ...planSeleccionado } : null; successEl.style.display = 'none';
+    codigoAplicado = false;
+    planEfectivo = planSeleccionado ? { ...planSeleccionado } : null;
+    successEl.style.display = 'none';
   }
   if (planEfectivo) actualizarResumen();
 }
@@ -695,11 +725,28 @@ function comprobarCodigo() {
 function actualizarResumen() {
   if (!planEfectivo) return;
   const conIva = facturaMode === 'corp';
-  const setup   = conIva ? (planEfectivo.setup   * 1.21).toFixed(2) : planEfectivo.setup;
-  const mensual = conIva ? (planEfectivo.mensual * 1.21).toFixed(2) : planEfectivo.mensual;
-  document.getElementById('resumenNombre').textContent = codigoAplicado ? 'MC Lite (Plan descontinuado)' : planEfectivo.plan;
-  document.getElementById('resumenPrecios').innerHTML = `<strong>${setup}€</strong> pago inicial · <strong>${mensual}€/mes</strong> · ${planEfectivo.tags} MCTags`;
+  const setup  = conIva ? (planEfectivo.setup * 1.21).toFixed(2) : planEfectivo.setup;
+  const unidad = planEfectivo.unidad || 'MCTags';
+
+  document.getElementById('resumenNombre').textContent = codigoAplicado ? `${planEfectivo.plan} (tarifa exclusiva)` : planEfectivo.plan;
+
+  let precioTxt = `<strong>${setup}€</strong> pago único · ${planEfectivo.tags} ${unidad}`;
+  if (servicioTags === 'premium') {
+    precioTxt += ` · <strong>+10€/mes</strong> MC Premium`;
+  } else if (servicioTags === 'estaticas') {
+    precioTxt += ` · Tags estáticas incluidas`;
+  }
+  document.getElementById('resumenPrecios').innerHTML = precioTxt;
   document.getElementById('ivaNote').style.display = conIva ? 'block' : 'none';
+}
+
+// === SERVICIO DE ETIQUETAS ===
+function setServicio(mode) {
+  servicioTags = mode;
+  document.getElementById('btnEstaticas').className = 'toggle-btn' + (mode === 'estaticas' ? ' selected-promo' : '');
+  document.getElementById('btnPremium').className  = 'toggle-btn' + (mode === 'premium'  ? ' selected-corp'  : '');
+  document.getElementById('err_servicio').style.display = 'none';
+  actualizarResumen();
 }
 
 // === FACTURA ===
@@ -739,7 +786,15 @@ function validarPagina2() {
 
 function validarPagina3() {
   let ok = true;
+
+  if (!servicioTags) {
+    document.getElementById('err_servicio').style.display = 'block'; ok = false;
+  } else {
+    document.getElementById('err_servicio').style.display = 'none';
+  }
+
   if (!facturaMode) { document.getElementById('err_factura').style.display = 'block'; ok = false; }
+
   if (facturaMode === 'corp') {
     [
       { id: 'fact_nombre',    err: 'err_fact_nombre',    check: v => v.trim() !== '' },
@@ -761,12 +816,12 @@ async function enviar() {
   if (hayArchivosSubiendo()) { alert('Espera a que terminen de subirse los archivos.'); return; }
 
   const conIva  = facturaMode === 'corp';
-  const setup   = conIva ? (planEfectivo.setup   * 1.21).toFixed(2) : planEfectivo.setup;
-  const mensual = conIva ? (planEfectivo.mensual * 1.21).toFixed(2) : planEfectivo.mensual;
+  const setup   = conIva ? (planEfectivo.setup * 1.21).toFixed(2) : planEfectivo.setup;
+  const unidad  = planEfectivo.unidad || 'MCTags';
 
   const telefonoCompleto = selectedCountry.code + ' ' + document.getElementById('neg_telefono').value.trim();
   const cartaUrl = document.getElementById('neg_carta_url').value.trim();
-  const labelPlan = codigoAplicado ? 'MC Lite (Descontinuado)' : planEfectivo.plan;
+  const labelPlan = codigoAplicado ? `${planEfectivo.plan} (tarifa exclusiva)` : planEfectivo.plan;
 
   const btn = document.getElementById('btnSubmit');
   btn.textContent = 'Enviando…'; btn.disabled = true;
@@ -795,10 +850,13 @@ async function enviar() {
 
   msg += `\n━━━━ PLAN ━━━━\n`;
   msg += `💼 ${labelPlan}\n`;
-  msg += `   Tags: ${planEfectivo.tags}\n`;
-  msg += `   Setup: ${setup}€ | Mensual: ${mensual}€\n`;
+  msg += `   ${unidad}: ${planEfectivo.tags}\n`;
+  msg += `   Pago único: ${setup}€\n`;
   msg += `   IVA incluido: ${conIva ? 'Sí' : 'No'}\n`;
-  msg += `   Código lite: ${codigoAplicado ? 'Sí (javi29)' : 'No'}\n`;
+  msg += `   Código aplicado: ${codigoAplicado ? document.getElementById('codigoAsesor').value.trim() : 'No'}\n`;
+
+  msg += `\n━━━━ SERVICIO DE ETIQUETAS ━━━━\n`;
+  msg += `🏷️ ${servicioTags === 'premium' ? 'MC Premium (10€/mes)' : 'Tags estáticas (incluidas, sin coste)'}\n`;
 
   msg += `\n━━━━ PAGO ━━━━\n`;
   msg += `💳 Modalidad: ${facturaMode === 'corp' ? 'Corporativa' : 'Simple'}\n`;
@@ -816,7 +874,7 @@ async function enviar() {
   try { await fetch(urlWA); } catch (e) { console.warn('Error WA:', e); }
 
   document.getElementById('successPlan').textContent =
-    codigoAplicado ? 'MC Lite · 5 MCTags' : `${planEfectivo.plan} · ${planEfectivo.tags} MCTags`;
+    `${labelPlan} · ${planEfectivo.tags} ${unidad}`;
   document.getElementById('mainCard').style.display = 'none';
   document.getElementById('progressWrap').style.display = 'none';
   document.getElementById('successScreen').style.display = 'block';
@@ -824,8 +882,6 @@ async function enviar() {
 
   btn.textContent = 'Enviar pedido ✓'; btn.disabled = false;
 }
-
-setFactura('promo');
 </script>
 </body>
 </html>
